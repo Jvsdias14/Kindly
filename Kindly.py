@@ -4,6 +4,27 @@ from tkinter import filedialog
 import random
 import string
 from PIL import Image, ImageTk
+import mysql.connector 
+
+try:
+    global conexao
+    conexao = mysql.connector.connect(user = "root",host = "127.0.0.1")
+    bdOK = True
+except:
+	print("Não foi possível conectar ao SGBD. \nVerifique o XAMPP/WAMP ou os dados de conexão.")
+	bdOK = False
+
+if bdOK:
+    global cursor
+    cursor = conexao.cursor()
+# ---------- Cria e Conecta no Banco de Dados ---------- #	
+    try:
+	    cursor.execute("USE kindly;")
+	    print("kindly selecionado!!")
+    except:
+	    cursor.execute("USE kindly;")
+	    print("kindly selecionado!")
+
 
 class Kindly():
     def __init__(self):
@@ -15,6 +36,9 @@ class Kindly():
         self.jan.iconbitmap("C:\\Users\\res0130160\\OneDrive - Firjan\\Arquivos\\Kindly\\logoKindly.ico")
         self.imagens()
         self.labels()
+        
+        self.listad1_1 = []
+        self.listad1_2 = []
         
         t = Timer(2, self.Padrao2)
         t.start()
@@ -623,7 +647,7 @@ class Kindly():
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
     
 
-        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.teladoador7())
+        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.conexãod1())
         self.btn1.place(relx = 0.29, rely = 0.6, relwidth = 0.42, relheight = 0.15)
         
         self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.Padrao2())
@@ -638,14 +662,14 @@ class Kindly():
         global entrada1
         entrada1 = StringVar()
         self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
-        self.ent1.place(relx = 0.16, rely = 0.335, relwidth = 0.68, relheight = 0.06)
+        self.ent1.place(relx = 0.16, rely = 0.36, relwidth = 0.68, relheight = 0.06)
         entrada1.set("Digite seu e-mail")
         
         global entrada2
         entrada2 = StringVar()
         self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
         self.ent2.place(relx = 0.16, rely = 0.468, relwidth = 0.68, relheight = 0.06)
-        entrada2.set("Digite seu código")
+        entrada2.set("Digite sua senha")
 
         self.ent1.bind("<1>",self.limpard11)
         self.ent2.bind("<1>",self.limpard12)
@@ -655,7 +679,7 @@ class Kindly():
         self.limpar(entrada1, "Digite seu e-mail")
     
     def limpard12(self,evento=None):
-        self.limpar(entrada2, "Digite seu código")
+        self.limpar(entrada2, "Digite sua senha")
     
     def voltatexto(self,vento=None):
         x = entrada1.get()
@@ -663,7 +687,43 @@ class Kindly():
             entrada1.set("Digite seu e-mail") 
         y = entrada2.get()
         if y == "":
-            entrada2.set("Digite seu código")
+            entrada2.set("Digite sua senha")
+
+    def conexãod1(self):
+        self.emailescrito = entrada1.get()
+        self.senhaescrita = entrada2.get()
+ 
+        try:
+            cursor.execute("SELECT email FROM doadores WHERE email = '{}'".format(self.emailescrito))
+            for i in cursor:
+                for x in i:
+                    self.listad1_1.append(x)
+            self.emaildoador = self.listad1_1[0]
+            if self.emaildoador == self.emailescrito:
+                self.x = True
+            else:
+                self.lbl2 = Label(self.jan, text = "E-mail e/ou senha inválidos", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
+                self.lbl2.place(relx = 0.16, rely = 0.29, relwidth = 0.68, relheight = 0.06)
+            
+            cursor.execute("SELECT senha FROM doadores WHERE senha = '{}'".format(self.senhaescrita))
+            for i in cursor:
+                for x in i:
+                    self.listad1_2.append(x)
+            self.senhadoador = self.listad1_2[0]
+            if self.senhadoador == self.senhaescrita:
+                self.x = True
+            else:
+                self.x = False
+                self.lbl2 = Label(self.jan, text = "E-mail e/ou senha inválidos", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
+                self.lbl2.place(relx = 0.16, rely = 0.29, relwidth = 0.68, relheight = 0.05)
+        except Exception as e: 
+            print(e)
+            self.lbl2 = Label(self.jan, text = "E-mail e/ou senha inválidos", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
+            self.lbl2.place(relx = 0.16, rely = 0.29, relwidth = 0.68, relheight = 0.05)
+        
+        if self.x == True:
+            self.teladoador7()
+        
             
     def teladoador2(self):
         self.img1 = PhotoImage(file = "C:\\Users\\res0130160\\OneDrive - Firjan\\Arquivos\\Kindly\\Doador2.png")
@@ -837,7 +897,7 @@ class Kindly():
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
     
 
-        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.teladoador1())
+        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.conexãod6())
         self.btn1.place(relx = 0.29, rely = 0.8, relwidth = 0.42, relheight = 0.15)
         
         self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador1())
@@ -896,11 +956,39 @@ class Kindly():
             entrada2.set("Digite seu e-mail")
         z = entrada3.get()
         if z == "":
-            entrada3.set("Digite seu nome de usuário") 
+            entrada3.set("Digite sua senha") 
         a = entrada4.get()
         if a == "":
-            entrada4.set("Digite seu e-mail")
+            entrada4.set("Confirme sua senha")
 
+    def conexãod6(self):
+        self.nomescrito = entrada1.get()
+        self.emailescrito = entrada2.get()
+        self.senhaescrita = entrada3.get()
+        self.senhaescrita2 = entrada4.get()
+        self.x = False 
+        try:
+            print(self.emailescrito)
+            cursor.execute("SELECT email FROM doadores WHERE email = '{}'".format(self.emailescrito))
+            for i in cursor:
+                for x in i:
+                    self.listad1_1.append(x)
+            self.emaildoador = self.listad1_1[0]
+            print(self.emaildoador)
+            if self.emaildoador == self.emailescrito:
+                self.lbl2 = Label(self.jan, text = "E-mail já utilizado!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lbl2.place(relx = 0.12, rely = 0.5, relwidth = 0.5, relheight = 0.05)
+            else:
+                self.x = True
+            
+        except Exception as e: 
+            print(e)
+            self.lbl2 = Label(self.jan, text = "E-mail já utilizado", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
+            self.lbl2.place(relx = 0.12, rely = 0.5, relwidth = 0.5, relheight = 0.05)
+    
+        if self.x == True:
+            self.teladoador1()
+    
     def teladoador7(self):  
         self.img1 = PhotoImage(file = "C:\\Users\\res0130160\\OneDrive - Firjan\\Arquivos\\Kindly\\Doador7.png")
         self.img2 = PhotoImage(file = "C:\\Users\\res0130160\\OneDrive - Firjan\\Arquivos\\Kindly\\btnPerfil.PNG")
