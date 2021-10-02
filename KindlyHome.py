@@ -32,7 +32,7 @@ regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 class Kindly():
     def __init__(self):
         self.jan = Tk()
-        self.jan.geometry("375x667+750+220")
+        self.jan.geometry("375x667+550+20")
         self.jan.title("Kindly")
         self.jan.config(bg = "white")
         self.jan.resizable(False,False)
@@ -46,7 +46,6 @@ class Kindly():
         self.listad5_1 = []
         self.listad6_1 = []
         
-        self.lbl1T = False
         self.lbl2T = False
         self.lbl3T = False
         self.lbl4T = False
@@ -97,7 +96,7 @@ class Kindly():
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
 
 
-        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.telainst5())
+        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.conexãoi1())
         self.btn1.place(relx = 0.29, rely = 0.565, relwidth = 0.42, relheight = 0.15)
         
         self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.Padrao2())
@@ -146,6 +145,43 @@ class Kindly():
         if y == "":
             entrada2.set("Digite seu código")
     
+    def conexãoi1(self):
+        self.emailescrito = entrada1.get()
+        self.senhaescrita = entrada2.get()
+        self.x = False
+        try:
+            cursor.execute("SELECT email FROM instituicoes WHERE email = '{}'".format(self.emailescrito))
+            for i in cursor:
+                for x in i:
+                    self.listad1_1.append(x)
+            self.emaildoador = self.listad1_1[0]
+            self.listad1_1 = []
+            if self.emaildoador == self.emailescrito:
+                self.x = True
+            else:
+                self.lbl2 = Label(self.jan, text = "E-mail e/ou código", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
+                self.lbl2.place(relx = 0.16, rely = 0.28, relwidth = 0.68, relheight = 0.06)
+            
+            cursor.execute("SELECT codigo FROM instituicoes WHERE email = '{}'".format(self.emailescrito))
+            for i in cursor:
+                for x in i:
+                    self.listad1_2.append(x)
+            self.senhadoador = self.listad1_2[0]
+            self.listad1_2 = []
+            if self.senhadoador == self.senhaescrita:
+                self.x = True
+            else:
+                self.x = False
+                self.lbl2 = Label(self.jan, text = "E-mail e/ou código inválidos", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
+                self.lbl2.place(relx = 0.16, rely = 0.29, relwidth = 0.68, relheight = 0.05)
+        except Exception as e: 
+            print(e)
+            self.x = False
+            self.lbl2 = Label(self.jan, text = "E-mail e/ou código inválidos", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
+            self.lbl2.place(relx = 0.16, rely = 0.29, relwidth = 0.68, relheight = 0.05)
+        
+        if self.x == True:
+            self.telainst5()
     
     def telainst2e3(self):
         self.img1 = PhotoImage(file = os.path.abspath("Inst2.png"))
@@ -190,10 +226,6 @@ class Kindly():
         self.ent3.bind("<1>",self.limpar23)
         self.lbl1.bind("<1>",self.voltatextoI2e3)
 
-    def validar(self):
-        lbl = Label(self.jan, text = "Código inválido", font = "Century\ Gothic 14",fg = "#FE4A49",bd = 0, bg = "#131644")
-        lbl.place(relx = 0.155, rely = 0.59, relwidth = 0.4, relheight = 0.05)
-
     def limpar21(self,evento=None):
         self.limpar(entrada1, "Digite o nome da instituição")
     
@@ -213,6 +245,94 @@ class Kindly():
         z = entrada3.get()
         if z == "":
             entrada3.set("Digite seu código")
+
+    def conexãoi2(self):
+        self.nomescrito = entrada1.get()
+        self.emailescrito = entrada2.get()
+        self.senhaescrita = entrada3.get()
+        self.senhaescrita2 = entrada4.get()
+        self.x = False 
+        self.y = False
+        self.z = False
+        try:
+            if(re.fullmatch(regex, self.emailescrito)):
+                if self.lbl6T == True:
+                    self.lbld66.destroy()
+                    self.lbl6T = False
+                cursor.execute("SELECT email FROM doadores WHERE email = '{}'".format(self.emailescrito))
+                for i in cursor:
+                    for x in i:
+                        self.listad6_1.append(x)
+                self.emaildoador = self.listad6_1[0]
+                self.listad6_1 = []
+                if self.emaildoador == self.emailescrito:
+                    if self.lbl2T == False:
+                        self.lbld62 = Label(self.jan, text = "E-mail já utilizado!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                        self.lbld62.place(relx = 0.1, rely = 0.5, relwidth = 0.5, relheight = 0.05)
+                        self.lbl2T = True
+                    else:
+                        self.lbl2T = True
+                else:
+                    self.x = True
+                    if self.lbl2T == True:
+                        self.lbld62.destroy()
+            else:
+                if self.lbl6T == False:
+                    self.lbld66 = Label(self.jan, text = "E-mail inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                    self.lbld66.place(relx = 0.11, rely = 0.5, relwidth = 0.4, relheight = 0.05)
+                    self.lbl6T = True
+        
+        except Exception as e:
+            print(e)
+            self.x = True
+            print(self.lbl6T)
+            if self.lbl2T == True:
+                self.lbld62.destroy()
+                self.lbl2T = False
+            if self.lbl6T == True:
+                self.lbld66.destroy()
+                self.lbl6T = False
+    
+        if self.senhaescrita == "" or self.senhaescrita2 == "" or self.senhaescrita == "Digite sua senha" or self.senhaescrita2 == "Confirme sua senha":
+            if self.lbl4T == False:
+                if self.lbl3T == True:
+                    self.lbl3.destroy()
+                    self.lbl3T = False
+                self.lbl4 = Label(self.jan, text = "Digite a senha!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lbl4.place(relx = 0.1, rely = 0.76, relwidth = 0.4, relheight = 0.05)
+                self.lbl4T = True
+        else:
+            if self.senhaescrita == self.senhaescrita2:
+                self.y = True
+                if self.lbl3T == True:
+                    self.lbl3.destroy()
+                    self.lbl3T = False
+                if self.lbl4T == True:
+                    self.lbl4.destroy()
+                    self.lbl4T = False
+        
+            else:
+                if self.lbl3T == False:
+                    if self.lbl4T == True:
+                        self.lbl4.destroy()
+                        self.lbl4T = False
+                    self.lbl3 = Label(self.jan, text = "Senha digitada incorretamente!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                    self.lbl3.place(relx = 0.11, rely = 0.76, relwidth = 0.65, relheight = 0.05)
+                    self.lbl3T = True
+        
+        if self.nomescrito == "" or self.nomescrito == "Digite seu nome completo":
+            self.lbl5 = Label(self.jan, text = "Digite o nome!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+            self.lbl5.place(relx = 0.1, rely = 0.37, relwidth = 0.4, relheight = 0.05)
+            self.lbl5T = True
+        else:
+            self.z = True
+            if self.lbl5T == True:
+                self.lbl5.destroy()
+
+        if self.x == True and self.y == True and self.z == True:
+            cursor.execute("insert into doadores (nome,email,senha) values (%s,%s,%s);",(self.nomescrito,self.emailescrito, self.senhaescrita))
+            conexao.commit()
+            self.teladoador1()
     
 
     def telainst4(self):
@@ -717,7 +837,7 @@ class Kindly():
                 self.x = True
             else:
                 self.lbl2 = Label(self.jan, text = "E-mail e/ou senha inválidos", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
-                self.lbl2.place(relx = 0.16, rely = 0.29, relwidth = 0.68, relheight = 0.06)
+                self.lbl2.place(relx = 0.16, rely = 0.28, relwidth = 0.68, relheight = 0.06)
             
             cursor.execute("SELECT senha FROM doadores WHERE email = '{}'".format(self.emailescrito))
             for i in cursor:
@@ -1077,34 +1197,29 @@ class Kindly():
             if(re.fullmatch(regex, self.emailescrito)):
                 if self.lbl6T == True:
                     self.lbld66.destroy()
-                if self.emailescrito == "" or self.emailescrito == "Digite seu e-mail":
-                    self.lbld61 = Label(self.jan, text = "Digite o e-mail!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                    self.lbld61.place(relx = 0.1, rely = 0.5, relwidth = 0.4, relheight = 0.05)
-                    self.lbl1T = True
-                else:
-                    if self.lbl1T == True:
-                        self.lbld61.destroy()
-                    cursor.execute("SELECT email FROM doadores WHERE email = '{}'".format(self.emailescrito))
-                    for i in cursor:
-                        for x in i:
-                            self.listad6_1.append(x)
-                    self.emaildoador = self.listad6_1[0]
-                    self.listad6_1 = []
-                    if self.emaildoador == self.emailescrito:
-                        if self.lbl2T == False:
-                            self.lbld62 = Label(self.jan, text = "E-mail já utilizado!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                            self.lbld62.place(relx = 0.1, rely = 0.5, relwidth = 0.5, relheight = 0.05)
-                            self.lbl2T = True
-                        else:
-                            self.lbl2T = True
+                    self.lbl6T = False
+                cursor.execute("SELECT email FROM doadores WHERE email = '{}'".format(self.emailescrito))
+                for i in cursor:
+                    for x in i:
+                        self.listad6_1.append(x)
+                self.emaildoador = self.listad6_1[0]
+                self.listad6_1 = []
+                if self.emaildoador == self.emailescrito:
+                    if self.lbl2T == False:
+                        self.lbld62 = Label(self.jan, text = "E-mail já utilizado!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                        self.lbld62.place(relx = 0.1, rely = 0.5, relwidth = 0.5, relheight = 0.05)
+                        self.lbl2T = True
                     else:
-                        self.x = True
-                        if self.lbl2T == True:
-                            self.lbld62.destroy()
+                        self.lbl2T = True
+                else:
+                    self.x = True
+                    if self.lbl2T == True:
+                        self.lbld62.destroy()
             else:
-                self.lbld66 = Label(self.jan, text = "E-mail inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                self.lbld66.place(relx = 0.11, rely = 0.5, relwidth = 0.4, relheight = 0.05)
-                self.lbl6T = True
+                if self.lbl6T == False:
+                    self.lbld66 = Label(self.jan, text = "E-mail inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                    self.lbld66.place(relx = 0.11, rely = 0.5, relwidth = 0.4, relheight = 0.05)
+                    self.lbl6T = True
         
         except Exception as e:
             print(e)
@@ -1140,8 +1255,8 @@ class Kindly():
                     if self.lbl4T == True:
                         self.lbl4.destroy()
                         self.lbl4T = False
-                    self.lbl3 = Label(self.jan, text = "Senha digitada incorretamente", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                    self.lbl3.place(relx = 0.13, rely = 0.76, relwidth = 0.7, relheight = 0.05)
+                    self.lbl3 = Label(self.jan, text = "Senha digitada incorretamente!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                    self.lbl3.place(relx = 0.11, rely = 0.76, relwidth = 0.65, relheight = 0.05)
                     self.lbl3T = True
         
         if self.nomescrito == "" or self.nomescrito == "Digite seu nome completo":
