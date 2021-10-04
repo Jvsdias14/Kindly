@@ -64,6 +64,9 @@ class Kindly():
         self.lblc4T = False
         self.lblc5T = False
         self.lblc6T = False
+        self.lblc7T = False
+        self.lblc8T = False
+        self.lblc9T = False
         
         
         t = Timer(2, self.Padrao2)
@@ -905,9 +908,10 @@ class Kindly():
             self.lbl2.place(relx = 0.16, rely = 0.29, relwidth = 0.68, relheight = 0.05)
         
         if self.x == True:
+            global email 
+            email = self.emailescrito
             self.teladoador7()
         
-            
     def teladoador2(self):
         self.img1 = PhotoImage(file = os.path.abspath("Doador2.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnSetaR.PNG"))
@@ -1514,6 +1518,31 @@ class Kindly():
         self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teladoador11())
         self.btn3.place(relx = 0.13, rely = 0.86, relwidth = 0.72, relheight = 0.15)
     
+        self.conexaod10()
+        
+    def conexaod10(self):
+        try:
+            cursor.execute("SELECT id FROM doadores WHERE email = '{}'".format(email))
+            for i in cursor:
+                for x in i:
+                    self.listad6_1.append(x)
+                self.iddoador = self.listad6_1[0]
+                self.listad6_1 = []
+            
+            cursor.execute("SELECT numcard FROM cartoes WHERE iduser = '{}'".format(self.iddoador))
+            for i in cursor:
+                for x in i:
+                    self.listad6_1.append(x)
+            print(self.listad6_1)
+            for i in self.listad6_1:
+                i = i.split(" ")
+                z = "XXXX XXXX XXXX " + i[len(i) - 1]
+                self.listb1.insert(END, z)
+            self.listad6_1 = []
+        except Exception as e:
+            print(e)
+
+    
     def teladoador11(self):  
         self.img1 = PhotoImage(file = os.path.abspath("Doador11.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnCadastrar.PNG"))
@@ -1652,21 +1681,70 @@ class Kindly():
                 self.lblc2.place(relx = 0.08, rely = 0.38, relwidth = 0.4, relheight = 0.04)
                 self.lblc2T = True
         else:
-            self.x1 = True
-            if self.lblc2T == True:
-                self.lblc2.destroy()
-                self.lblc2T = False
-
+            try:
+                y = self.validarcpf(self.cpfescrito)
+                if y == self.cpfescrito: 
+                    self.x2 = True
+                    if self.lblc2T == True:
+                        self.lblc2.destroy()
+                        self.lblc2T = False
+                    if self.lblc7T == True:
+                        self.lblc7.destroy()
+                        self.lblc7T = False
+                else:
+                    if self.lblc2T == True:
+                        self.lblc2t.destroy()
+                        self.lblc2T = False
+                    if self.lblc7T == False:
+                        self.lblc7 = Label(self.jan, text = "CPF inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                        self.lblc7.place(relx = 0.08, rely = 0.38, relwidth = 0.4, relheight = 0.04)
+                        self.lblc7T = True
+            except Exception as e:
+                print(e)
+                
         if self.numcard == "" or self.numcard == "Número do cartão":
             if self.lblc3T == False:
                 self.lblc3 = Label(self.jan, text = "Digite o número!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
                 self.lblc3.place(relx = 0.11, rely = 0.495, relwidth = 0.4, relheight = 0.04)
                 self.lblc3T = True
         else:
-            self.x1 = True
-            if self.lblc3T == True:
-                self.lblc3.destroy()
-                self.lblc3T = False
+            
+            print(len(self.numcard))
+            if len(self.numcard) == 19:
+                for i in self.numcard:
+                    if i.isnumeric():
+                        self.x3 = True
+                        if self.lblc3T == True:
+                            self.lblc3.destroy()
+                            self.lblc3T = False
+                        if self.lblc8T == True:
+                            self.lblc8.destroy()
+                            self.lblc8T = False
+                    else:
+                        if self.lblc3T == True:
+                            self.lblc3.destroy()
+                            self.lblc3T = False
+                        if self.lblc8T == True:
+                            self.lblc8.destroy()
+                            self.lblc8T = False
+                        
+                        if self.lblc8T == False:
+                            self.lblc8 = Label(self.jan, text = "Número inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                            self.lblc8.place(relx = 0.11, rely = 0.495, relwidth = 0.4, relheight = 0.04)
+                            self.lblc8T = True
+            else:
+                        if self.lblc3T == True:
+                            self.lblc3.destroy()
+                            self.lblc3T = False
+                        if self.lblc8T == True:
+                            self.lblc8.destroy()
+                            self.lblc8T = False
+                        
+                        if self.lblc8T == False:
+                            self.lblc8 = Label(self.jan, text = "Número inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                            self.lblc8.place(relx = 0.11, rely = 0.495, relwidth = 0.4, relheight = 0.04)
+                            self.lblc8T = True
+                        
 
         if self.cvccard == "" or self.cvccard == "CVC":
             if self.lblc4T == False:
@@ -1674,10 +1752,26 @@ class Kindly():
                 self.lblc4.place(relx = 0.09, rely = 0.61, relwidth = 0.4, relheight = 0.04)
                 self.lblc4T = True
         else:
-            self.x1 = True
-            if self.lblc4T == True:
-                self.lblc4.destroy()
-                self.lblc4T = False
+            if len(self.cvccard) != 3 and self.numcard.isnumeric():
+                self.x4 = True
+                if self.lblc4T == True:
+                    self.lblc4.destroy()
+                    self.lblc4T = False
+                if self.lblc9T == True:
+                    self.lblc9.destroy()
+                    self.lblc9T = False
+            else:
+                if self.lblc4T == True:
+                    self.lblc4.destroy()
+                    self.lblc4T = False
+                if self.lblc9T == True:
+                    self.lblc9.destroy()
+                    self.lblc9T = False
+                
+                if self.lblc9T == False:
+                    self.lblc9 = Label(self.jan, text = "CVC inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                    self.lblc9.place(relx = 0.11, rely = 0.61, relwidth = 0.4, relheight = 0.04)
+                    self.lblc9T = True
 
         if self.vencimentocard == "" or self.vencimentocard == "Vencimento":
             if self.lblc5T == False:
@@ -1685,7 +1779,7 @@ class Kindly():
                 self.lblc5.place(relx = 0.1, rely = 0.72, relwidth = 0.5, relheight = 0.04)
                 self.lblc5T = True
         else:
-            self.x1 = True
+            self.x5 = True
             if self.lblc5T == True:
                 self.lblc5.destroy()
                 self.lblc5T = False
@@ -1696,15 +1790,22 @@ class Kindly():
                 self.lblc6.place(relx = 0.12, rely = 0.84, relwidth = 0.4, relheight = 0.04)
                 self.lblc6T = True
         else:
-            self.x1 = True
+            self.x6 = True
             if self.lblc6T == True:
                 self.lblc6.destroy()
                 self.lblc6T = False
         
         if self.x1 == True and self.x2 == True and self.x3 == True and self.x4 == True and self.x5 == True and self.x6 == True:
-            #cursor.execute("insert into doadores (nome,email,senha) values (%s,%s,%s);",(self.nomescrito,self.emailescrito, self.senhaescrita))
-            #conexao.commit()
-            self.teladoador11()
+            cursor.execute("SELECT id FROM doadores WHERE email = '{}'".format(email))
+            for i in cursor:
+                for x in i:
+                    self.listad6_1.append(x)
+                self.iddoador = self.listad6_1[0]
+                self.listad6_1 = []
+            
+            cursor.execute(f"insert into cartoes (nomeuser,cpfuser,numcard,cvccard,vencicard,bandeiracard,iduser) values (%s,%s,%s,%s,%s,%s,%s);",(self.nomescrito,self.cpfescrito, self.numcard, self.cvccard, self.vencimentocard,self.bandeiracard,self.iddoador))
+            conexao.commit()
+            self.teladoador10()
         
     def teladoador12(self):  
         self.img1 = PhotoImage(file = os.path.abspath("Doador12.png"))
