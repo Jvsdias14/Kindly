@@ -1977,3 +1977,13 @@ class Kindly():
         entrada1.set("")
         
 Kindly()
+
+'''CREATE TABLE cartoes(idcard INT AUTO_INCREMENT PRIMARY KEY,    
+iduser VARCHAR(100),     
+nomeuser VARCHAR(100),   
+cpfuser VARCHAR(100),      
+numcard VARCHAR(100), 
+cvccard VARCHAR(100), 
+vencicard VARCHAR(100),
+bandeiracard VARCHAR(100))
+'''
