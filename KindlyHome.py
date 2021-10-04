@@ -57,6 +57,13 @@ class Kindly():
         self.lbli3T = False
         self.lbli4T = False
         self.lbli5T = False
+
+        self.lblc1T = False
+        self.lblc2T = False
+        self.lblc3T = False
+        self.lblc4T = False
+        self.lblc5T = False
+        self.lblc6T = False
         
         
         t = Timer(2, self.Padrao2)
@@ -69,6 +76,28 @@ class Kindly():
     
     def selecionar(self):
         self.nomearq = filedialog.askopenfilename(initialdir ="C:/", title = "Escolher Arquivo")
+    
+    def validarcpf(self,cpf):
+        cpf = ''.join(re.findall(r'\d', str(cpf)))
+
+        if not cpf or len(cpf) < 11:
+            return False
+
+        antigo = [int(d) for d in cpf]
+
+        # Gera CPF com novos dígitos verificadores e compara com CPF informado
+        novo = antigo[:9]
+        while len(novo) < 11:
+            resto = sum([v * (len(novo) + 1 - i) for i, v in enumerate(novo)]) % 11
+
+            digito_verificador = 0 if resto <= 1 else 11 - resto
+
+            novo.append(digito_verificador)
+
+        if novo == antigo:
+            return cpf
+
+        return False
     
     def imagens(self):    
         self.img1 = PhotoImage(file = os.path.abspath("Padrao1.png"))
@@ -115,7 +144,7 @@ class Kindly():
         global entrada1
         entrada1 = StringVar()
         self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
-        self.ent1.place(relx = 0.16, rely = 0.335, relwidth = 0.68, relheight = 0.06)
+        self.ent1.place(relx = 0.16, rely = 0.368, relwidth = 0.68, relheight = 0.06)
         entrada1.set("Digite seu e-mail")
         
         global entrada2
@@ -212,13 +241,13 @@ class Kindly():
         global entrada1
         entrada1 = StringVar()
         self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
-        self.ent1.place(relx = 0.155, rely = 0.332, relwidth = 0.69, relheight = 0.055)
+        self.ent1.place(relx = 0.155, rely = 0.28, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Digite o nome da instituição")
         
         global entrada2
         entrada2 = StringVar()
         self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
-        self.ent2.place(relx = 0.155, rely = 0.426, relwidth = 0.68, relheight = 0.055)
+        self.ent2.place(relx = 0.155, rely = 0.4, relwidth = 0.68, relheight = 0.055)
         entrada2.set("Digite seu e-mail")
         
         global entrada3
@@ -264,25 +293,29 @@ class Kindly():
                 if self.lbli2T == True:
                     self.lbld66.destroy()
                     self.lbli2T = False
-                cursor.execute("SELECT email FROM doadores WHERE email = '{}'".format(self.emailescrito))
+                cursor.execute("SELECT email FROM instituicoes WHERE email = '{}'".format(self.emailescrito))
                 for i in cursor:
                     for x in i:
                         self.listad6_1.append(x)
                 self.emaildoador = self.listad6_1[0]
                 self.listad6_1 = []
                 if self.emaildoador == self.emailescrito:
+                    if self.lbli2T == True:
+                        self.lbld66.destroy()
                     if self.lbli3T == False:
                         self.lbld62 = Label(self.jan, text = "E-mail já utilizado!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                        self.lbld62.place(relx = 0.1, rely = 0.5, relwidth = 0.5, relheight = 0.05)
+                        self.lbld62.place(relx = 0.135, rely = 0.47, relwidth = 0.4, relheight = 0.04)
                         self.lbli3T = True
                 else:
                     self.x = True
                     if self.lbli3T == True:
                         self.lbld62.destroy()
             else:
+                if self.lbli3T == True:
+                        self.lbld62.destroy()
                 if self.lbli2T == False:
                     self.lbld66 = Label(self.jan, text = "E-mail inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                    self.lbld66.place(relx = 0.11, rely = 0.485, relwidth = 0.4, relheight = 0.03)
+                    self.lbld66.place(relx = 0.11, rely = 0.47, relwidth = 0.4, relheight = 0.03)
                     self.lbli2T = True
         
         except Exception as e:
@@ -297,9 +330,12 @@ class Kindly():
                 self.lbli2T = False
     
         if self.codigoescrito == "" or self.codigoescrito == "Digite seu código":
+            if self.lbli5T == True:
+                self.lbl5.destroy()
+                self.lbli5T = False
             if self.lbli4T == False:
                 self.lbl4 = Label(self.jan, text = "Digite o código!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                self.lbl4.place(relx = 0.11, rely = 0.59, relwidth = 0.4, relheight = 0.03)
+                self.lbl4.place(relx = 0.12, rely = 0.59, relwidth = 0.4, relheight = 0.03)
                 self.lbli4T = True
         else:
             try:
@@ -321,13 +357,13 @@ class Kindly():
                 print(e)
                 if self.lbli5T == False:
                     self.lbl5 = Label(self.jan, text = "Código inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                    self.lbl5.place(relx = 0.1, rely = 0.76, relwidth = 0.4, relheight = 0.03)
+                    self.lbl5.place(relx = 0.12, rely = 0.59, relwidth = 0.4, relheight = 0.03)
                     self.lbli5T = True
         
         if self.nomescrito == "" or self.nomescrito == "Digite o nome da instituição":
             if self.lbli1T == False:
                 self.lbl1 = Label(self.jan, text = "Digite o nome!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                self.lbl1.place(relx = 0.1, rely = 0.39, relwidth = 0.4, relheight = 0.03)
+                self.lbl1.place(relx = 0.1, rely = 0.35, relwidth = 0.4, relheight = 0.03)
                 self.lbli1T = True
         else:
             self.z = True
@@ -335,9 +371,15 @@ class Kindly():
                 self.lbl1.destroy()
 
         if self.x == True and self.y == True and self.z == True:
-            cursor.execute("UPDATE instituicoes SET nome = '{self.nomescrito}', email = '{self.emailescrito}' where id = '{self.idinst}'")
-            conexao.commit()
-            self.telainst1()
+            print(self.nomescrito)
+            print(self.emailescrito)
+            print(self.idinst)
+            try:
+                cursor.execute(f"UPDATE instituicoes SET nome = '{self.nomescrito}', email = '{self.emailescrito}' where id = '{self.idinst}'")
+                conexao.commit()
+                self.telainst1()
+            except:
+                print("deu ruim")
     
 
     def telainst4(self):
@@ -1261,7 +1303,7 @@ class Kindly():
                         self.lbl4.destroy()
                         self.lbl4T = False
                     self.lbl3 = Label(self.jan, text = "Senha digitada incorretamente!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                    self.lbl3.place(relx = 0.11, rely = 0.76, relwidth = 0.65, relheight = 0.05)
+                    self.lbl3.place(relx = 0.14, rely = 0.76, relwidth = 0.7, relheight = 0.05)
                     self.lbl3T = True
         
         if self.nomescrito == "" or self.nomescrito == "Digite seu nome completo":
@@ -1459,7 +1501,10 @@ class Kindly():
         self.lbl2 = Label(self.jan, bg = "#BDAB9F", fg = "black", text = "Nome do doador", font = " Century\ Gothic 14")
         self.lbl2.place(relx = 0.31, rely = 0.165, relwidth =0.62, relheight = 0.04)
         
-
+        self.listb1 = Listbox(self.jan, bg = "#131644",fg = "white", font = "Century\ Gothic 14", bd = 0, selectbackground = "#FEAD77", highlightbackground = "#FEAD77")
+        self.listb1.place(relx = 0.09, rely = 0.63, relwidth = 0.8, relheight = 0.23)
+        
+        
         self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.teste())
         self.btn1.place(relx = 0.05, rely = 0.123, relwidth = 0.22, relheight = 0.14)
         
@@ -1467,7 +1512,7 @@ class Kindly():
         self.btn2.place(relx = 0.055, rely = 0.025, relwidth = 0.15, relheight = 0.06)
         
         self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teladoador11())
-        self.btn3.place(relx = 0.13, rely = 0.74, relwidth = 0.72, relheight = 0.15)
+        self.btn3.place(relx = 0.13, rely = 0.86, relwidth = 0.72, relheight = 0.15)
     
     def teladoador11(self):  
         self.img1 = PhotoImage(file = os.path.abspath("Doador11.png"))
@@ -1479,8 +1524,8 @@ class Kindly():
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
     
 
-        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.teladoador10())
-        self.btn1.place(relx = 0.29, rely = 0.8, relwidth = 0.42, relheight = 0.15)
+        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.conexaod11())
+        self.btn1.place(relx = 0.29, rely = 0.85, relwidth = 0.42, relheight = 0.15)
         
         self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador10())
         self.btn2.place(relx = 0.055, rely = 0.025, relwidth = 0.15, relheight = 0.06)
@@ -1489,19 +1534,19 @@ class Kindly():
         global entrada1
         entrada1 = StringVar()
         self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
-        self.ent1.place(relx = 0.155, rely = 0.25, relwidth = 0.69, relheight = 0.055)
+        self.ent1.place(relx = 0.155, rely = 0.2, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Nome do cartão")
         
         global entrada2
         entrada2 = StringVar()
         self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
-        self.ent2.place(relx = 0.155, rely = 0.35, relwidth = 0.68, relheight = 0.055)
-        entrada2.set("CPF/CNPJ")
+        self.ent2.place(relx = 0.155, rely = 0.317, relwidth = 0.68, relheight = 0.055)
+        entrada2.set("CPF")
         
         global entrada3
         entrada3 = StringVar()
         self.ent3 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada3,insertbackground='white')
-        self.ent3.place(relx = 0.155, rely = 0.447, relwidth = 0.68, relheight = 0.055)
+        self.ent3.place(relx = 0.155, rely = 0.43, relwidth = 0.68, relheight = 0.055)
         entrada3.set("Número do cartão")
         
         global entrada4
@@ -1513,13 +1558,13 @@ class Kindly():
         global entrada5
         entrada5 = StringVar()
         self.ent5 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada5,insertbackground='white')
-        self.ent5.place(relx = 0.155, rely = 0.64, relwidth = 0.68, relheight = 0.055)
+        self.ent5.place(relx = 0.155, rely = 0.66, relwidth = 0.68, relheight = 0.055)
         entrada5.set("Vencimento")
         
         global entrada6
         entrada6 = StringVar()
         self.ent6 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada6,insertbackground='white')
-        self.ent6.place(relx = 0.155, rely = 0.73, relwidth = 0.68, relheight = 0.055)
+        self.ent6.place(relx = 0.155, rely = 0.778, relwidth = 0.68, relheight = 0.055)
         entrada6.set("Bandeira")
 
         self.ent1.bind("<1>",self.limpard111)
@@ -1535,7 +1580,7 @@ class Kindly():
         self.limpar(entrada1, "Nome do cartão")
     
     def limpard112(self,evento=None):
-        self.limpar(entrada2, "CPF/CNPJ")
+        self.limpar(entrada2, "CPF")
             
     def limpard113(self,evento=None):
         self.limpar(entrada3, "Número do cartão")
@@ -1556,7 +1601,7 @@ class Kindly():
             entrada1.set("Nome do cartão") 
         y = entrada2.get()
         if y == "":
-            entrada2.set("CPF/CNPJ")
+            entrada2.set("CPF")
         z = entrada3.get()
         if z == "":
             entrada3.set("Número do cartão") 
@@ -1574,6 +1619,92 @@ class Kindly():
         x = entrada1.get()        
         x = x.upper()
         entrada1.set(x)
+    
+    def conexaod11(self):
+        self.nomescrito = entrada1.get()
+        self.cpfescrito = entrada2.get()
+        self.numcard = entrada3.get()
+        self.cvccard = entrada4.get()
+        self.vencimentocard = entrada5.get()
+        self.bandeiracard = entrada6.get()
+        
+        self.x1 = False 
+        self.x2 = False
+        self.x3 = False
+        self.x4 = False
+        self.x5 = False
+        self.x6 = False
+        
+        if self.nomescrito == "" or self.nomescrito == "Nome do cartão":
+            if self.lblc1T == False:
+                self.lblc1 = Label(self.jan, text = "Digite o nome!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lblc1.place(relx = 0.1, rely = 0.26, relwidth = 0.4, relheight = 0.04)
+                self.lblc1T = True
+        else:
+            self.x1 = True
+            if self.lblc1T == True:
+                self.lblc1.destroy()
+                self.lblc1T = False
+        
+        if self.cpfescrito == "" or self.cpfescrito == "CPF":
+            if self.lblc2T == False:
+                self.lblc2 = Label(self.jan, text = "Digite o CPF!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lblc2.place(relx = 0.08, rely = 0.38, relwidth = 0.4, relheight = 0.04)
+                self.lblc2T = True
+        else:
+            self.x1 = True
+            if self.lblc2T == True:
+                self.lblc2.destroy()
+                self.lblc2T = False
+
+        if self.numcard == "" or self.numcard == "Número do cartão":
+            if self.lblc3T == False:
+                self.lblc3 = Label(self.jan, text = "Digite o número!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lblc3.place(relx = 0.11, rely = 0.495, relwidth = 0.4, relheight = 0.04)
+                self.lblc3T = True
+        else:
+            self.x1 = True
+            if self.lblc3T == True:
+                self.lblc3.destroy()
+                self.lblc3T = False
+
+        if self.cvccard == "" or self.cvccard == "CVC":
+            if self.lblc4T == False:
+                self.lblc4 = Label(self.jan, text = "Digite o CVC!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lblc4.place(relx = 0.09, rely = 0.61, relwidth = 0.4, relheight = 0.04)
+                self.lblc4T = True
+        else:
+            self.x1 = True
+            if self.lblc4T == True:
+                self.lblc4.destroy()
+                self.lblc4T = False
+
+        if self.vencimentocard == "" or self.vencimentocard == "Vencimento":
+            if self.lblc5T == False:
+                self.lblc5 = Label(self.jan, text = "Digite o vencimento!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lblc5.place(relx = 0.1, rely = 0.72, relwidth = 0.5, relheight = 0.04)
+                self.lblc5T = True
+        else:
+            self.x1 = True
+            if self.lblc5T == True:
+                self.lblc5.destroy()
+                self.lblc5T = False
+
+        if self.bandeiracard == "" or self.bandeiracard == "Bandeira":
+            if self.lblc6T == False:
+                self.lblc6 = Label(self.jan, text = "Digite a bandeira!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
+                self.lblc6.place(relx = 0.12, rely = 0.84, relwidth = 0.4, relheight = 0.04)
+                self.lblc6T = True
+        else:
+            self.x1 = True
+            if self.lblc6T == True:
+                self.lblc6.destroy()
+                self.lblc6T = False
+        
+        if self.x1 == True and self.x2 == True and self.x3 == True and self.x4 == True and self.x5 == True and self.x6 == True:
+            #cursor.execute("insert into doadores (nome,email,senha) values (%s,%s,%s);",(self.nomescrito,self.emailescrito, self.senhaescrita))
+            #conexao.commit()
+            self.teladoador11()
         
     def teladoador12(self):  
         self.img1 = PhotoImage(file = os.path.abspath("Doador12.png"))
