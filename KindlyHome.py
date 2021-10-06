@@ -77,6 +77,8 @@ class Kindly():
         
         self.jan.mainloop()
         
+    global instituicao
+    instituicao = "Nome do instituto"
     def teste(self):
         print("sla")
     
@@ -191,7 +193,7 @@ class Kindly():
         self.senhaescrita = entrada2.get()
         self.x = False
         try:
-            cursor.execute("SELECT email FROM doadortuicoes WHERE email = '{}'".format(self.emailescrito))
+            cursor.execute("SELECT email FROM instituicoes WHERE email = '{}'".format(self.emailescrito))
             for i in cursor:
                 for x in i:
                     self.listad1_1.append(x)
@@ -203,7 +205,7 @@ class Kindly():
                 self.lbl2 = Label(self.jan, text = "E-mail e/ou código", font = "Century\ Gothic 14", fg = "#FE4A49", bg = "#131644")
                 self.lbl2.place(relx = 0.16, rely = 0.28, relwidth = 0.68, relheight = 0.06)
             
-            cursor.execute("SELECT codigo FROM doadortuicoes WHERE email = '{}'".format(self.emailescrito))
+            cursor.execute("SELECT codigo FROM instituicoes WHERE email = '{}'".format(self.emailescrito))
             for i in cursor:
                 for x in i:
                     self.listad1_2.append(x)
@@ -301,7 +303,7 @@ class Kindly():
                 if self.lbli2T == True:
                     self.lbld66.destroy()
                     self.lbli2T = False
-                cursor.execute("SELECT email FROM doadortuicoes WHERE email = '{}'".format(self.emailescrito))
+                cursor.execute("SELECT email FROM instituicoes WHERE email = '{}'".format(self.emailescrito))
                 for i in cursor:
                     for x in i:
                         self.listad6_1.append(x)
@@ -347,14 +349,14 @@ class Kindly():
                 self.lbli4T = True
         else:
             try:
-                cursor.execute("SELECT codigo FROM doadortuicoes WHERE codigo = '{}'".format(self.codigoescrito))
+                cursor.execute("SELECT codigo FROM instituicoes WHERE codigo = '{}'".format(self.codigoescrito))
                 for i in cursor:
                     for x in i:
                         self.listad6_1.append(x)
                 self.codigoinst = self.listad6_1[0]
                 self.listad6_1 = []
                 if self.codigoinst == self.codigoescrito:
-                    cursor.execute("SELECT id FROM doadortuicoes WHERE codigo = '{}'".format(self.codigoescrito))
+                    cursor.execute("SELECT id FROM instituicoes WHERE codigo = '{}'".format(self.codigoescrito))
                     for i in cursor:
                         for x in i:
                             self.listad6_1.append(x)
@@ -383,7 +385,7 @@ class Kindly():
             print(self.emailescrito)
             print(self.idinst)
             try:
-                cursor.execute(f"UPDATE doadortuicoes SET nome = '{self.nomescrito}', email = '{self.emailescrito}' where id = '{self.idinst}'")
+                cursor.execute(f"UPDATE instituicoes SET nome = '{self.nomescrito}', email = '{self.emailescrito}' where id = '{self.idinst}'")
                 conexao.commit()
                 self.telainst1()
             except:
@@ -402,7 +404,7 @@ class Kindly():
         self.btn1.place(relx = 0.13, rely = 0.75, relwidth = 0.74, relheight = 0.15)
 
     def telainst5(self):
-        cursor.execute("SELECT nome FROM doadortuicoes WHERE email = '{}'".format(emailinst))
+        cursor.execute("SELECT nome FROM instituicoes WHERE email = '{}'".format(emailinst))
         for i in cursor:
             for x in i:
                 self.listad6_1.append(x)
@@ -1387,7 +1389,7 @@ class Kindly():
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
         
-        self.lbl2 = Label(self.jan, bg = "#BDAB9F", fg = "black", text = "Nome da instituição", font = " Century\ Gothic 14")
+        self.lbl2 = Label(self.jan, bg = "#BDAB9F", fg = "black", text = instituicao, font = " Century\ Gothic 14")
         self.lbl2.place(relx = 0.32, rely = 0.165, relwidth =0.62, relheight = 0.04)
 
 
@@ -1948,24 +1950,49 @@ class Kindly():
         self.ent1.place(relx = 0.045, rely = 0.14, relwidth = 0.82, relheight = 0.075)
         entrada1.set("Digite aqui...")
         
-        self.ent1.bind("<1>",self.limpard121)
-        self.lbl1.bind("<1>",self.voltatextod121)
-
         self.listb1 = Listbox(self.jan, bg = "#131644",fg = "white", font = "Century\ Gothic 14", bd = 0, selectbackground = "#FEAD77")
         self.listb1.place(relx = 0.01, rely = 0.23, relwidth = 0.98, relheight = 0.41)
-        
+
+        self.ent1.bind("<1>",self.limpard121)
+        self.lbl1.bind("<1>",self.voltatextod121)
+        self.listb1.bind("<1>",self.conexãod12)
+
     def pesquisa(self):
         self.pesq = entrada1.get()
-        cursor.execute("SELECT nome FROM instituicoes WHERE nome is like = '{}'".format(self.pesq))
-        for i in cursor:
-            for x in i:
-                self.listad6_1.append(x)
-            self.resulpesq = self.listad6_1
-            self.listad6_1 = []
+        self.listb1.delete("0","end")
+        if self.pesq == "":
+            self.listb1.insert(END, "Instituição inexistente!")
+        else:
+            try:
+                cursor.execute("SELECT nome FROM instituicoes WHERE nome like '%{}%'".format(self.pesq))
+                for i in cursor:
+                    for x in i:
+                        self.listad6_1.append(x)
+                
+                self.resulpesq = self.listad6_1
+                self.listad6_1 = []
+                for i in range(len(self.resulpesq)):
+                    self.listb1.insert(END, self.resulpesq[i])
+                self.resulpesq = []
+                
+                self.results = self.listb1.get(0)
+                print(self.results)
+                if self.results == "":
+                    self.listb1.insert(END, "Instituição inexistente!")
+            except Exception as e:
+                print(e)
+    
+    def conexãod12(self,evento = None):
+        t = Timer(0.1, self.selectela)
+        t.start()
         
-        self.listb1.insert(END, self.resulpesq)
-        
-
+    def selectela(self):
+        self.indice = self.listb1.curselection()
+        for i in self.indice:
+            global instituicao 
+            instituicao = self.listb1.get(i)
+            self.teladoador8()
+             
     def limpard121(self,evento=None):
         self.limpar(entrada1, "Digite aqui...")
     
