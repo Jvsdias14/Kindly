@@ -29,6 +29,9 @@ if bdOK:
 global regex
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
+global nd
+nd = ""
+
 class Kindly():
     def __init__(self):
         self.jan = Tk()
@@ -816,9 +819,9 @@ class Kindly():
         self.listb1.place(relx = 0.01, rely = 0.23, relwidth = 0.98, relheight = 0.41)
         
     def pesquisa(self):
-        self.listb1.insert(END, "Nome do doadortuto")
-        self.listb1.insert(END, "Nome do doadortuto")
-        self.listb1.insert(END, "Nome do doadortuto")
+        self.listb1.insert(END, "Nome do instituto")
+        self.listb1.insert(END, "Nome do instituto")
+        self.listb1.insert(END, "Nome do instituto")
         
             
     def limpar131(self,evento=None):
@@ -1510,6 +1513,9 @@ class Kindly():
         self.lbl3.place(relx = 0.26, rely = 0.955, relwidth =0.55, relheight = 0.03)
         
     def teladoador10(self):
+        global nd
+        nd = 1
+        print(nd)
         self.img1 = PhotoImage(file = os.path.abspath("doador10.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnPerfilgg.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
@@ -1559,6 +1565,8 @@ class Kindly():
             print(e)
 
     def teladoador11(self):  
+        
+        
         self.img1 = PhotoImage(file = os.path.abspath("doador11.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnCadastrar.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
@@ -1571,7 +1579,7 @@ class Kindly():
         self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.conexaod11())
         self.btn1.place(relx = 0.29, rely = 0.85, relwidth = 0.42, relheight = 0.15)
         
-        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador10())
+        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.escolhatl())
         self.btn2.place(relx = 0.055, rely = 0.025, relwidth = 0.15, relheight = 0.06)
         
 
@@ -1666,7 +1674,13 @@ class Kindly():
         x = entrada1.get()        
         x = x.upper()
         entrada1.set(x)
-    
+        
+    def escolhatl(self):
+        if nd == 1:
+            self.teladoador10()
+        if nd == 2:
+            self.teladoador16()
+            
     def arrumar(self,evento=None):
         self.numcard = entrada3.get()
         if len(self.numcard) < 20:
@@ -1907,7 +1921,10 @@ class Kindly():
             
             cursor.execute(f"insert into cartoes (nomeuser,cpfuser,numcard,cvccard,vencicard,bandeiracard,iduser) values (%s,%s,%s,%s,%s,%s,%s);",(self.nomescrito,self.cpfescrito, self.numcard, self.cvccard, self.vencimentocard,self.bandeiracard,self.iddoador))
             conexao.commit()
-            self.teladoador10()
+            if nd == 1:
+                self.teladoador10()
+            if nd == 2:
+                self.teladoador16()
         
     def teladoador12(self):  
         self.img1 = PhotoImage(file = os.path.abspath("doador12.png"))
@@ -1938,10 +1955,11 @@ class Kindly():
         self.listb1.place(relx = 0.01, rely = 0.23, relwidth = 0.98, relheight = 0.41)
         
     def pesquisa(self):
-        self.listb1.insert(END, "Nome do doadortuto")
-        self.listb1.insert(END, "Nome do doadortuto")
-        self.listb1.insert(END, "Nome do doadortuto")
+        self.listb1.insert(END, "Nome do instituto")
+        self.listb1.insert(END, "Nome do instituto")
+        self.listb1.insert(END, "Nome do instituto")
         
+
     def limpard121(self,evento=None):
         self.limpar(entrada1, "Digite aqui...")
     
@@ -2010,7 +2028,7 @@ class Kindly():
 
         self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.apagar())
         self.btn1.place(relx = 0.1, rely = 0.81, relwidth = 0.2, relheight = 0.12)
-        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teste())
+        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador15())
         self.btn2.place(relx = 0.7, rely = 0.81, relwidth = 0.2, relheight = 0.12)
         self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teladoador8())
         self.btn3.place(relx = 0.07, rely = 0.03, relwidth = 0.15, relheight = 0.06)
@@ -2077,5 +2095,62 @@ class Kindly():
     
     def apagar(self):
         entrada1.set("")
+    
+    def teladoador15(self):       
+        self.img1 = PhotoImage(file = os.path.abspath("Doador15.png"))
+        self.img2 = PhotoImage(file = os.path.abspath("btnCartao.PNG"))
+        self.img3 = PhotoImage(file = os.path.abspath("btnBoleto.PNG"))
+        self.img4 = PhotoImage(file = os.path.abspath("btnPix.PNG"))
+        self.img5 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
         
+        self.lbl1 = Label(self.jan, image = self.img1)
+        self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
+    
+        
+        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.teladoador16())
+        self.btn1.place(relx = 0.298, rely = 0.26, relwidth = 0.4, relheight = 0.2)
+        
+        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teste())
+        self.btn2.place(relx = 0.29, rely = 0.48, relwidth = 0.42, relheight = 0.22)
+        
+        self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teste())
+        self.btn3.place(relx = 0.255, rely = 0.71, relwidth = 0.5, relheight = 0.16)
+        
+        self.btn4 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img5 ,command = lambda: self.teladoador14())
+        self.btn4.place(relx = 0.055, rely = 0.025, relwidth = 0.15, relheight = 0.06)
+        
+    def teladoador16(self):   
+        global nd
+        nd = 2
+        self.img1 = PhotoImage(file = os.path.abspath("Doador16.png"))
+        self.img2 = PhotoImage(file = os.path.abspath("btnPagar.PNG"))
+        self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
+        self.img4 = PhotoImage(file = os.path.abspath("btnAddcartao.PNG"))
+    
+        self.lbl1 = Label(self.jan, image = self.img1)
+        self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
+           
+        self.listb1 = Listbox(self.jan, bg = "#131644",fg = "white", font = "Century\ Gothic 14", bd = 0, selectbackground = "#FEAD77", highlightbackground = "#FEAD77")
+        self.listb1.place(relx = 0.15, rely = 0.21, relwidth = 0.7, relheight = 0.4)
+        
+        self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.teladoador17())
+        self.btn1.place(relx = 0.3, rely = 0.78, relwidth = 0.4, relheight = 0.14)
+        
+        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador15())
+        self.btn2.place(relx = 0.055, rely = 0.025, relwidth = 0.15, relheight = 0.06)
+        
+        self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teladoador11())
+        self.btn3.place(relx = 0.14, rely = 0.64, relwidth = 0.72, relheight = 0.15)
+        
+        self.conexaod10()
+    
+    def teladoador17(self):    
+        self.img1 = PhotoImage(file = os.path.abspath("Doador17.png"))
+    
+        self.lbl1 = Label(self.jan, image = self.img1)
+        self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
+        
+        t = Timer(2, self.teladoador8)
+        t.start()
+
 Kindly()
