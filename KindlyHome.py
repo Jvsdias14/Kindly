@@ -1955,9 +1955,15 @@ class Kindly():
         self.listb1.place(relx = 0.01, rely = 0.23, relwidth = 0.98, relheight = 0.41)
         
     def pesquisa(self):
-        self.listb1.insert(END, "Nome do instituto")
-        self.listb1.insert(END, "Nome do instituto")
-        self.listb1.insert(END, "Nome do instituto")
+        self.pesq = entrada1.get()
+        cursor.execute("SELECT nome FROM instituicoes WHERE nome is like = '{}'".format(self.pesq))
+        for i in cursor:
+            for x in i:
+                self.listad6_1.append(x)
+            self.resulpesq = self.listad6_1
+            self.listad6_1 = []
+        
+        self.listb1.insert(END, self.resulpesq)
         
 
     def limpard121(self,evento=None):
@@ -2028,7 +2034,7 @@ class Kindly():
 
         self.btn1 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img2 ,command = lambda: self.apagar())
         self.btn1.place(relx = 0.1, rely = 0.81, relwidth = 0.2, relheight = 0.12)
-        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador15())
+        self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.conexãod14())
         self.btn2.place(relx = 0.7, rely = 0.81, relwidth = 0.2, relheight = 0.12)
         self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teladoador8())
         self.btn3.place(relx = 0.07, rely = 0.03, relwidth = 0.15, relheight = 0.06)
@@ -2062,7 +2068,6 @@ class Kindly():
         
         self.btnnum = Button(self.jan, bg = "#131644", image = self.imgbt0, activebackground= "#131644", bd = 0, command = lambda: self.nums(0))
         self.btnnum.place(relx = 0.4, rely = 0.814, relwidth = 0.2, relheight = 0.12)
-   
 
         global entrada1
         entrada1 = StringVar()
@@ -2095,6 +2100,12 @@ class Kindly():
     
     def apagar(self):
         entrada1.set("")
+        
+    def conexãod14(self):
+        self.valor = entrada1.get()
+        #cursor.execute(f"insert into pagamentos (valor,iduser,idinst) values (%s,%s,%s);",(self.valor,self.iddoador,self.idinst))
+        #conexao.commit()
+        self.teladoador15()
     
     def teladoador15(self):       
         self.img1 = PhotoImage(file = os.path.abspath("Doador15.png"))
