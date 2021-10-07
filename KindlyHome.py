@@ -83,7 +83,8 @@ class Kindly():
         print("sla")
     
     def selecionar(self):
-        self.nomearq = filedialog.askopenfilename(initialdir ="C:/", title = "Escolher Arquivo")
+        global nomearq
+        nomearq = filedialog.askopenfilename(initialdir ="C:/", title = "Escolher Arquivo")
     
     def validarcpf(self,cpf):
         cpf = ''.join(re.findall(r'\d', str(cpf)))
@@ -107,6 +108,7 @@ class Kindly():
 
         return False
     
+    
     def imagens(self):    
         self.img1 = PhotoImage(file = os.path.abspath("Padrao1.png"))
     
@@ -129,10 +131,10 @@ class Kindly():
 
     
     def telainst1(self):
-
         self.img1 = PhotoImage(file = os.path.abspath("Inst1.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnEntrar.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
+        self.img4 = PhotoImage(file = os.path.abspath("btnOlho.PNG"))
 
 
         self.lbl1 = Label(self.jan, image = self.img1)
@@ -147,46 +149,78 @@ class Kindly():
         
         self.btn3 = Button(self.jan, text = "Crie agora", font = "Century\ Gothic 18",fg = "#FD824F", bg = "#131644",bd = 0, activebackground = "#131644",command = lambda: self.telainst2e3())
         self.btn3.place(relx = 0.33, rely = 0.84, relwidth = 0.33, relheight = 0.05)
-
+        
+        self.btn4 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn4.place(relx = 0.88, rely = 0.47, relwidth = 0.08, relheight = 0.06)
 
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.16, rely = 0.368, relwidth = 0.68, relheight = 0.06)
         entrada1.set("Digite seu e-mail")
         
         global entrada2
         entrada2 = StringVar()
-        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
+        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent2.place(relx = 0.16, rely = 0.468, relwidth = 0.68, relheight = 0.06)
         entrada2.set("Digite seu código")
         
-        self.ent1.bind("<1>",self.limpart11)
-        self.ent2.bind("<1>",self.limpart12)
+        self.ent1.bind("<1>",self.limparti1_1)
+        self.ent2.bind("<1>",self.limparti1_2)
+        self.btn4.bind("<1>",self.mostrari1_1)
+        self.btn4.bind("<ButtonRelease-1>",self.mostrari1_2)
         self.lbl1.bind("<1>",self.voltatextoI1)
 
-    def limpart11(self,evento=None):
-        self.limpar(entrada1, "Digite seu e-mail")
-    
-    def limpart12(self,evento=None):
-        self.limpar(entrada2, "Digite seu código")
-
-    def limpar(self, entrada, text):
-        x = entrada.get()
-        if x == text:
-            entrada.set("")
-        elif x == "":
-            entrada.set(text)
+    def limparti1_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        x = entrada1.get()
+        if x == "Digite seu e-mail":
+            entrada1.set("")
         else:
-            entrada.set(x)      
-        
+            entrada1.set(x) 
+        x2 = entrada2.get()
+        if x2 == "":
+            entrada2.set("Digite seu código")
+            self.ent2.config(show="")
+        elif x2 == "Digite seu código":
+            self.ent2.config(show="")
+        else:
+            entrada2.set(x2) 
+         
+    def limparti1_2(self,evento=None):
+        self.ent2.config(state=NORMAL)
+        self.ent2.config(show="*")
+        x = entrada2.get()
+        if x == "Digite seu código":
+            entrada2.set("")
+        else:
+            entrada2.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
+            entrada1.set("Digite seu e-mail")
+        else:
+            entrada1.set(x2) 
+
+            
     def voltatextoI1(self,vento=None):
         x = entrada1.get()
         if x == "":
             entrada1.set("Digite seu e-mail") 
+            self.ent1.config(state=DISABLED)
         y = entrada2.get()
         if y == "":
             entrada2.set("Digite seu código")
+            self.ent2.config(state=DISABLED)
+            self.ent2.config(show="")
+    
+    def mostrari1_1(self,event=None):
+        z = entrada2.get()
+        if z != "Digite seu código":
+            self.ent2.config(show="")
+    def mostrari1_2(self,event=None):
+        z = entrada2.get()
+        if z != "Digite seu código":
+            self.ent2.config(show="*")
     
     def conexãoi1(self):
         self.emailescrito = entrada1.get()
@@ -232,6 +266,7 @@ class Kindly():
         self.img1 = PhotoImage(file = os.path.abspath("Inst2.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnCadastrar.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
+        self.img4 = PhotoImage(file = os.path.abspath("btnOlho.PNG"))
     
         
         self.lbl1 = Label(self.jan, image = self.img1)
@@ -246,51 +281,124 @@ class Kindly():
         
         self.btn3 = Button(self.jan, text = "clique aqui", font = "Century\ Gothic 18",fg = "#FD824F", bg = "#131644",bd = 0, activebackground = "#131644",command = lambda: self.telainst4())
         self.btn3.place(relx = 0.32, rely = 0.9, relwidth = 0.37, relheight = 0.05)
+        
+        self.btn4 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn4.place(relx = 0.88, rely = 0.52, relwidth = 0.08, relheight = 0.06)
 
 
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.155, rely = 0.28, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Digite o nome da instituição")
         
         global entrada2
         entrada2 = StringVar()
-        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
+        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent2.place(relx = 0.155, rely = 0.4, relwidth = 0.68, relheight = 0.055)
         entrada2.set("Digite seu e-mail")
         
         global entrada3
         entrada3 = StringVar()
-        self.ent3 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada3,insertbackground='white')
+        self.ent3 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada3,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent3.place(relx = 0.155, rely = 0.522, relwidth = 0.68, relheight = 0.055)
         entrada3.set("Digite seu código")
         
-        self.ent1.bind("<1>",self.limpar21)
-        self.ent2.bind("<1>",self.limpar22)
-        self.ent3.bind("<1>",self.limpar23)
-        self.lbl1.bind("<1>",self.voltatextoI2e3)
+        self.ent1.bind("<1>",self.limparti2_1)
+        self.ent2.bind("<1>",self.limparti2_2)
+        self.ent3.bind("<1>",self.limparti2_3)
+        self.lbl1.bind("<1>",self.voltatextoI2)
+        self.btn4.bind("<1>",self.mostrari2_1)
+        self.btn4.bind("<ButtonRelease-1>",self.mostrari2_2)
 
-    def limpar21(self,evento=None):
-        self.limpar(entrada1, "Digite o nome da instituição")
+    def limparti2_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        self.ent3.config(show="*")
+        x = entrada1.get()
+        if x == "Digite o nome da instituição":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
+        x2 = entrada2.get()
+        if x2 == "":
+            entrada2.set("Digite seu e-mail")
+        else:
+            entrada2.set(x2) 
+        x3 = entrada3.get()
+        if x3 == "":
+            entrada3.set("Digite seu código")
+            self.ent3.config(show="")
+        elif x3 == "Digite seu código":
+            self.ent3.config(show="")
+        else:
+            entrada3.set(x3) 
+         
+    def limparti2_2(self,evento=None):
+        self.ent2.config(state=NORMAL)
+        self.ent3.config(show="*")
+        x = entrada2.get()
+        if x == "Digite seu e-mail":
+            entrada2.set("")
+        else:
+            entrada2.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
+            entrada1.set("Digite o nome da instituição")
+        else:
+            entrada1.set(x2) 
+        x3 = entrada3.get()
+        if x3 == "":
+            entrada3.set("Digite seu código")
+            self.ent3.config(show="")
+        elif x3 == "Digite seu código":
+            self.ent3.config(show="")
+        else:
+            entrada3.set(x3) 
     
-    def limpar22(self,evento=None):
-        self.limpar(entrada2, "Digite seu e-mail")
+    def limparti2_3(self,evento=None):
+        self.ent3.config(state=NORMAL)
+        self.ent3.config(show="*")
+        x = entrada3.get()
+        if x == "Digite seu código":
+            entrada3.set("")
+        else:
+            entrada3.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
+            entrada1.set("Digite o nome da instituição")
+        else:
+            entrada1.set(x2) 
+        x3 = entrada2.get()
+        if x3 == "":
+            entrada2.set("Digite seu e-mail")
+        else:
+            entrada2.set(x3) 
             
-    def limpar23(self,evento=None):
-        self.limpar(entrada3, "Digite seu código")
-    
-    def voltatextoI2e3(self,vento=None):
+    def voltatextoI2(self,event=None):
         x = entrada1.get()
         if x == "":
-            entrada1.set("Digite o nome da instituição")
+            entrada1.set("Digite o nome da instituição") 
+            self.ent1.config(state=DISABLED)
         y = entrada2.get()
         if y == "":
             entrada2.set("Digite seu e-mail")
+            self.ent2.config(state=DISABLED)
         z = entrada3.get()
         if z == "":
             entrada3.set("Digite seu código")
-
+            self.ent3.config(state=DISABLED)
+            self.ent3.config(show="")
+    
+    def mostrari2_1(self,event=None):
+        z = entrada3.get()
+        if z != "Digite seu código":
+            self.ent3.config(show="")
+    def mostrari2_2(self,event=None):
+        z = entrada3.get()
+        if z != "Digite seu código":
+            self.ent3.config(show="*")
+    
+    
     def conexãoi2(self):
         self.nomescrito = entrada1.get()
         self.emailescrito = entrada2.get()
@@ -408,8 +516,8 @@ class Kindly():
         for i in cursor:
             for x in i:
                 self.listad6_1.append(x)
-            global nomedoador 
-            nomedoador= self.listad6_1[0]
+            global nomeinsti 
+            nomeinsti= self.listad6_1[0]
             self.listad6_1 = []
         self.img1 = PhotoImage(file = os.path.abspath("Inst5.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnPerfil.PNG"))
@@ -474,16 +582,28 @@ class Kindly():
         self.ent1.place(relx = 0.155, rely = 0.23, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Digite aqui...")
         
-        self.ent1.bind("<1>",self.limpar61)
-        self.lbl1.bind("<1>",self.voltatexto)
+        self.ent1.bind("<1>",self.limpari6_1)
+        self.lbl1.bind("<1>",self.voltatextoi6_1)
             
-    def limpar61(self,evento=None):
-        self.limpar(entrada1, "Digite aqui...")
+    def limpari6_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        x = entrada1.get()
+        if x == "Digite aqui...":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
     
-    def voltatexto(self,evento=None):
+    def voltatextoi6_1(self,vento=None):
         x = entrada1.get()
         if x == "":
-            entrada1.set("Digite aqui...")
+            entrada1.set("Digite aqui...") 
+            self.ent1.config(state=DISABLED)
+    
+    def algo2(self,evento=None):
+        x = entrada1.get()
+        if x != "":
+            cursor.execute(f"insert into postagem (idinst,mensagem,foto) values (%s,%s,%s);",(self.idinst,x,nomearq))
+            conexao.commit()
         
     def telainst7(self):
           
@@ -497,7 +617,7 @@ class Kindly():
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
         
-        self.lbl2 = Label(self.jan, bg = "#BDAB9F", fg = "black", text = nomedoador, font = " Century\ Gothic 14")
+        self.lbl2 = Label(self.jan, bg = "#BDAB9F", fg = "black", text = nomeinsti, font = " Century\ Gothic 14")
         self.lbl2.place(relx = 0.32, rely = 0.165, relwidth =0.62, relheight = 0.04)
         
 
@@ -620,7 +740,7 @@ class Kindly():
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
         
-        self.lbl2 = Label(self.jan, bg = "#BDAB9F", fg = "black", text = "Nome da instituição", font = " Century\ Gothic 14")
+        self.lbl2 = Label(self.jan, bg = "#BDAB9F", fg = "black", text = nomeinsti, font = " Century\ Gothic 14")
         self.lbl2.place(relx = 0.32, rely = 0.165, relwidth =0.62, relheight = 0.04)
         
    
@@ -820,12 +940,23 @@ class Kindly():
         self.listb1 = Listbox(self.jan, bg = "#131644",fg = "white", font = "Century\ Gothic 14", bd = 0, selectbackground = "#FEAD77")
         self.listb1.place(relx = 0.01, rely = 0.23, relwidth = 0.98, relheight = 0.41)
         
-    def pesquisa(self):
-        self.listb1.insert(END, "Nome do instituto")
-        self.listb1.insert(END, "Nome do instituto")
-        self.listb1.insert(END, "Nome do instituto")
+        self.listb1.bind("<1>",self.conexãoi13)
+
+    
+    def conexãoi13(self,evento = None):
+        t = Timer(0.1, self.selectela2)
+        t.start()
         
-            
+    def selectela2(self):
+        self.indice = self.listb1.curselection()
+        for i in self.indice:
+            global instituicao 
+            instituicao = self.listb1.get(i)
+            if instituicao == nomeinsti:
+                self.telainst7()
+            else:
+                self.telainst9()
+    
     def limpar131(self,evento=None):
         self.limpar(entrada1, "Digite aqui...")
     
@@ -837,7 +968,8 @@ class Kindly():
     def teladoador1(self):    
         self.img1 = PhotoImage(file = os.path.abspath("Doador1.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnEntrar.PNG"))
-        self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))    
+        self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))  
+        self.img4 = PhotoImage(file = os.path.abspath("btnOlho.PNG"))  
 
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
@@ -854,36 +986,77 @@ class Kindly():
         
         self.btn4 = Button(self.jan, text = "Esqueceu sua senha?", font = "Century\ Gothic 11",fg = "white", bg = "#131644",bd = 0, activebackground = "#131644",command = lambda: self.teladoador2())
         self.btn4.place(relx = 0.17, rely = 0.54, relwidth = 0.42, relheight = 0.05)
+        
+        self.btn5 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn5.place(relx = 0.88, rely = 0.47, relwidth = 0.08, relheight = 0.06)
 
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.16, rely = 0.36, relwidth = 0.68, relheight = 0.06)
         entrada1.set("Digite seu e-mail")
         
         global entrada2
         entrada2 = StringVar()
-        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
+        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent2.place(relx = 0.16, rely = 0.468, relwidth = 0.68, relheight = 0.06)
         entrada2.set("Digite sua senha")
 
-        self.ent1.bind("<1>",self.limpard11)
-        self.ent2.bind("<1>",self.limpard12)
+        self.ent1.bind("<1>",self.limpartd1_1)
+        self.ent2.bind("<1>",self.limpartd1_2)
+        self.btn5.bind("<1>",self.mostrard1_1)
+        self.btn5.bind("<ButtonRelease-1>",self.mostrard1_2)
         self.lbl1.bind("<1>",self.voltatextod1)
-        
-    def limpard11(self,evento=None):
-        self.limpar(entrada1, "Digite seu e-mail")
-    
-    def limpard12(self,evento=None):
-        self.limpar(entrada2, "Digite sua senha")
-    
+
+    def limpartd1_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        x = entrada1.get()
+        if x == "Digite seu e-mail":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
+        x2 = entrada2.get()
+        if x2 == "":
+            entrada2.set("Digite sua senha")
+            self.ent2.config(show="")
+        elif x2 == "Digite sua senha":
+            self.ent2.config(show="")
+        else:
+            entrada2.set(x2) 
+         
+    def limpartd1_2(self,evento=None):
+        self.ent2.config(state=NORMAL)
+        self.ent2.config(show="*")
+        x = entrada2.get()
+        if x == "Digite sua senha":
+            entrada2.set("")
+        else:
+            entrada2.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
+            entrada1.set("Digite seu e-mail")
+        else:
+            entrada1.set(x2) 
+ 
     def voltatextod1(self,vento=None):
         x = entrada1.get()
         if x == "":
             entrada1.set("Digite seu e-mail") 
+            self.ent1.config(state=DISABLED)
         y = entrada2.get()
         if y == "":
             entrada2.set("Digite sua senha")
+            self.ent2.config(state=DISABLED)
+            self.ent2.config(show="")
+    
+    def mostrard1_1(self,event=None):
+        z = entrada2.get()
+        if z != "Digite sua senha":
+            self.ent2.config(show="")
+    def mostrard1_2(self,event=None):
+        z = entrada2.get()
+        if z != "Digite sua senha":
+            self.ent2.config(show="*")
 
     def conexãod1(self):
         self.emailescrito = entrada1.get()
@@ -943,20 +1116,26 @@ class Kindly():
 
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.155, rely = 0.545, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Digite seu e-mail")
         
-        self.ent1.bind("<1>",self.limpard21)
-        self.lbl1.bind("<1>",self.voltatextod2)
+        self.ent1.bind("<1>",self.limpard22_1)
+        self.lbl1.bind("<1>",self.voltatextod22_1)
             
-    def limpard21(self,evento=None):
-        self.limpar(entrada1, "Digite seu e-mail")
+    def limpard22_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        x = entrada1.get()
+        if x == "Digite seu e-mail":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
     
-    def voltatextod2(self,vento=None):
+    def voltatextod22_1(self,vento=None):
         x = entrada1.get()
         if x == "":
-            entrada1.set("Digite seu e-mail")
+            entrada1.set("Digite seu e-mail") 
+            self.ent1.config(state=DISABLED)
     
     def createcodigo(self):
         possibilidades = string.ascii_uppercase + string.digits
@@ -995,6 +1174,7 @@ class Kindly():
         self.img1 = PhotoImage(file = os.path.abspath("doador3.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnVerificar.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
+        self.img4 = PhotoImage(file = os.path.abspath("btnOlho.PNG"))
 
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
@@ -1005,25 +1185,47 @@ class Kindly():
         
         self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador2())
         self.btn2.place(relx = 0.03, rely = 0.06, relwidth = 0.15, relheight = 0.06)
+        
+        self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn3.place(relx = 0.88, rely = 0.46, relwidth = 0.08, relheight = 0.06)
     
 
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.155, rely = 0.46, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Insira o código")
         
-        self.ent1.bind("<1>",self.limpard31)
-        self.lbl1.bind("<1>",self.voltatextod3)
-
-            
-    def limpard31(self,evento=None):
-        self.limpar(entrada1, "Insira o código")
+        self.ent1.bind("<1>",self.limpard3_1)
+        self.lbl1.bind("<1>",self.voltatextod3_1)
+        self.btn3.bind("<1>",self.mostrard3_1)
+        self.btn3.bind("<ButtonRelease-1>",self.mostrard3_2)
+          
+    def limpard3_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        self.ent1.config(show="*")
+        x = entrada1.get()
+        if x == "Insira o código":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
     
-    def voltatextod3(self,vento=None):
+    def voltatextod3_1(self,vento=None):
         x = entrada1.get()
         if x == "":
-            entrada1.set("Insira o código")
+            entrada1.set("Insira o código") 
+            self.ent1.config(state=DISABLED)
+            self.ent1.config(show="")
+    
+    def mostrard3_1(self,event=None):
+        z = entrada1.get()
+        if z != "Insira o código":
+            self.ent1.config(show="")
+    def mostrard3_2(self,event=None):
+        z = entrada1.get()
+        if z != "Insira o código":
+            self.ent1.config(show="*")
+    
 
     def conexãod3(self):
         self.codigoescrito = entrada1.get()
@@ -1038,6 +1240,7 @@ class Kindly():
         self.img2 = PhotoImage(file = os.path.abspath("btnVerificar.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnReenviar.PNG"))
         self.img4 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
+        self.img5 = PhotoImage(file = os.path.abspath("btnOlho.PNG"))
     
  
         self.lbl1 = Label(self.jan, image = self.img1)
@@ -1052,24 +1255,45 @@ class Kindly():
         
         self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teladoador2())
         self.btn3.place(relx = 0.03, rely = 0.06, relwidth = 0.15, relheight = 0.06)
+        
+        self.btn4 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img5)
+        self.btn4.place(relx = 0.88, rely = 0.34, relwidth = 0.08, relheight = 0.06)
 
-    
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.155, rely = 0.335, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Insira o código")
         
-        self.ent1.bind("<1>",self.limpard41)
-        self.lbl1.bind("<1>",self.voltatextod4)
-            
-    def limpard41(self,evento=None):
-        self.limpar(entrada1, "Insira o código")
+        self.ent1.bind("<1>",self.limpard4_1)
+        self.lbl1.bind("<1>",self.voltatextod4_1)
+        self.btn4.bind("<1>",self.mostrard4_1)
+        self.btn4.bind("<ButtonRelease-1>",self.mostrard4_2)
+          
+    def limpard4_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        self.ent1.config(show="*")
+        x = entrada1.get()
+        if x == "Insira o código":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
     
-    def voltatextod4(self,vento=None):
+    def voltatextod4_1(self,vento=None):
         x = entrada1.get()
         if x == "":
-            entrada1.set("Insira o código")
+            entrada1.set("Insira o código") 
+            self.ent1.config(state=DISABLED)
+            self.ent1.config(show="")
+    
+    def mostrard4_1(self,event=None):
+        z = entrada1.get()
+        if z != "Insira o código":
+            self.ent1.config(show="")
+    def mostrard4_2(self,event=None):
+        z = entrada1.get()
+        if z != "Insira o código":
+            self.ent1.config(show="*")
     
     def conexãod4(self):
         self.codigoescrito = entrada1.get()
@@ -1079,7 +1303,7 @@ class Kindly():
         self.img1 = PhotoImage(file = os.path.abspath("doador5.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnRedefinir.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
-    
+        self.img4 = PhotoImage(file = os.path.abspath("btnOlho.PNG"))
 
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
@@ -1090,37 +1314,96 @@ class Kindly():
         
         self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador2())
         self.btn2.place(relx = 0.03, rely = 0.06, relwidth = 0.15, relheight = 0.06)
+        
+        self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn3.place(relx = 0.88, rely = 0.4, relwidth = 0.08, relheight = 0.06)
+        
+        self.btn4 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn4.place(relx = 0.88, rely = 0.53, relwidth = 0.08, relheight = 0.06)
     
 
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.155, rely = 0.398, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Digite sua nova senha")
 
         global entrada2
         entrada2 = StringVar()
-        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
+        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent2.place(relx = 0.155, rely = 0.523, relwidth = 0.69, relheight = 0.055)
         entrada2.set("Confirme sua nova senha")
             
-        self.ent1.bind("<1>",self.limpard51)
-        self.ent2.bind("<1>",self.limpard52)
+        self.ent1.bind("<1>",self.limpartd5_1)
+        self.ent2.bind("<1>",self.limpartd5_2)
+        self.btn3.bind("<1>",self.mostrard5_1)
+        self.btn3.bind("<ButtonRelease-1>",self.mostrard5_2)
+        self.btn4.bind("<1>",self.mostrard5_3)
+        self.btn4.bind("<ButtonRelease-1>",self.mostrard5_4)
         self.lbl1.bind("<1>",self.voltatextod5)
-        
-    def limpard51(self,evento=None):
-        self.limpar(entrada1, "Digite sua nova senha")
-    
-    def limpard52(self,evento=None):
-        self.limpar(entrada2, "Confirme sua nova senha")
-        
+
+    def limpartd5_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        self.ent1.config(show="*")
+        x = entrada1.get()
+        if x == "Digite sua nova senha":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
+        x2 = entrada2.get()
+        if x2 == "":
+            entrada2.set("Confirme sua nova senha")
+            self.ent2.config(show="")
+        elif x2 == "Confirme sua nova senha":
+            self.ent2.config(show="")
+        else:
+            entrada2.set(x2) 
+         
+    def limpartd5_2(self,evento=None):
+        self.ent2.config(state=NORMAL)
+        self.ent2.config(show="*")
+        x = entrada2.get()
+        if x == "Confirme sua nova senha":
+            entrada2.set("")
+        else:
+            entrada2.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
+            entrada1.set("Digite sua nova senha")
+            self.ent1.config(show="")
+        elif x2 == "Digite sua nova senha":
+            self.ent1.config(show="")
+        else:
+            entrada1.set(x2) 
+ 
     def voltatextod5(self,vento=None):
         x = entrada1.get()
         if x == "":
-            entrada1.set("Digite sua nova senha")
+            entrada1.set("Digite sua nova senha") 
+            self.ent1.config(state=DISABLED)
+            self.ent2.config(show="")
         y = entrada2.get()
         if y == "":
             entrada2.set("Confirme sua nova senha")
+            self.ent2.config(state=DISABLED)
+            self.ent2.config(show="")
+    
+    def mostrard5_1(self,event=None):
+        z = entrada1.get()
+        if z != "Digite sua nova senha":
+            self.ent1.config(show="")
+    def mostrard5_2(self,event=None):
+        z = entrada1.get()
+        if z != "Digite sua nova senha":
+            self.ent1.config(show="*")
+    def mostrard5_3(self,event=None):
+        z = entrada2.get()
+        if z != "Confirme sua nova senha":
+            self.ent2.config(show="")
+    def mostrard5_4(self,event=None):
+        z = entrada2.get()
+        if z != "Confirme sua nova senha":
+            self.ent2.config(show="*")
     
     def conexãod5(self):
         self.senhaescritad5 = entrada1.get()
@@ -1143,6 +1426,7 @@ class Kindly():
         self.img1 = PhotoImage(file = os.path.abspath("doador6.png"))
         self.img2 = PhotoImage(file = os.path.abspath("btnCadastrar.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
+        self.img4 = PhotoImage(file = os.path.abspath("btnOlho.PNG"))
 
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
@@ -1154,99 +1438,197 @@ class Kindly():
         self.btn2 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador1())
         self.btn2.place(relx = 0.03, rely = 0.055, relwidth = 0.15, relheight = 0.06)
         
+        self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn3.place(relx = 0.88, rely = 0.57, relwidth = 0.08, relheight = 0.06)
+
+        self.btn4 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4)
+        self.btn4.place(relx = 0.88, rely = 0.7, relwidth = 0.08, relheight = 0.06)
+        
 
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white')
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada1,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.155, rely = 0.305, relwidth = 0.69, relheight = 0.055)
         entrada1.set("Digite seu nome completo")
         
         global entrada2
         entrada2 = StringVar()
-        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white')
+        self.ent2 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada2,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent2.place(relx = 0.155, rely = 0.435, relwidth = 0.68, relheight = 0.055)
         entrada2.set("Digite seu e-mail")
         
         global entrada3
         entrada3 = StringVar()
-        self.ent3 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada3,insertbackground='white')
+        self.ent3 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada3,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent3.place(relx = 0.155, rely = 0.57, relwidth = 0.68, relheight = 0.055)
         entrada3.set("Digite sua senha")
         
         global entrada4
         entrada4 = StringVar()
-        self.ent4 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada4,insertbackground='white')
+        self.ent4 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 0, textvariable = entrada4,insertbackground='white',disabledbackground = "#131644",disabledforeground = "white")
         self.ent4.place(relx = 0.155, rely = 0.695, relwidth = 0.68, relheight = 0.055)
         entrada4.set("Confirme sua senha")
 
-        self.ent1.bind("<1>",self.limpard61)
-        self.ent2.bind("<1>",self.limpard62)
-        self.ent3.bind("<1>",self.limpard63)
-        self.ent4.bind("<1>",self.limpard64)
-        self.lbl1.bind("<1>",self.voltatextod6)
+        self.ent1.bind("<1>",self.limpartd2_1)
+        self.ent2.bind("<1>",self.limpartd2_2)
+        self.ent3.bind("<1>",self.limpartd2_3)
+        self.ent4.bind("<1>",self.limpartd2_4)
+        self.lbl1.bind("<1>",self.voltatextod2)
+        self.btn3.bind("<1>",self.mostrard2_1)
+        self.btn3.bind("<ButtonRelease-1>",self.mostrard2_2)
+        self.btn4.bind("<1>",self.mostrard2_3)
+        self.btn4.bind("<ButtonRelease-1>",self.mostrard2_4)
 
-    def limpard61(self,evento=None):
-        self.limpar(entrada1, "Digite seu nome completo")
-        y = entrada2.get()
-        if y == "":
-            entrada2.set("Digite seu e-mail")
-        z = entrada3.get()
-        if z == "":
-            entrada3.set("Digite sua senha") 
-        a = entrada4.get()
-        if a == "":
-            entrada4.set("Confirme sua senha")
-    
-    def limpard62(self,evento=None):
-        self.limpar(entrada2, "Digite seu e-mail")
+    def limpartd2_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        self.ent3.config(show="*")
         x = entrada1.get()
-        if x == "":
+        if x == "Digite seu nome completo":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
+        x2 = entrada2.get()
+        if x2 == "":
+            entrada2.set("Digite seu e-mail")
+        else:
+            entrada2.set(x2) 
+        x3 = entrada3.get()
+        if x3 == "":
+            entrada3.set("Digite sua senha")
+            self.ent3.config(show="")
+        elif x3 == "Digite sua senha":
+            self.ent3.config(show="")
+        else:
+            entrada3.set(x3) 
+        x4 = entrada4.get()
+        if x4 == "":
+            entrada4.set("Confirme sua senha")
+            self.ent4.config(show="")
+        elif x4 == "Digite sua senha":
+            self.ent4.config(show="")
+        else:
+            entrada4.set(x4) 
+         
+    def limpartd2_2(self,evento=None):
+        self.ent2.config(state=NORMAL)
+        self.ent3.config(show="*")
+        x = entrada2.get()
+        if x == "Digite seu e-mail":
+            entrada2.set("")
+        else:
+            entrada2.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
             entrada1.set("Digite seu nome completo")
-        z = entrada3.get()
-        if z == "":
-            entrada3.set("Digite sua senha") 
-        a = entrada4.get()
-        if a == "":
+        else:
+            entrada1.set(x2) 
+        x3 = entrada3.get()
+        if x3 == "":
+            entrada3.set("Digite sua senha")
+            self.ent3.config(show="")
+        elif x3 == "Digite sua senha":
+            self.ent3.config(show="")
+        else:
+            entrada3.set(x3) 
+        x4 = entrada4.get()
+        if x4 == "":
             entrada4.set("Confirme sua senha")
+            self.ent4.config(show="")
+        elif x4 == "Confirme sua senha":
+            self.ent4.config(show="")
+        else:
+            entrada4.set(x4) 
     
-    def limpard63(self,evento=None):
-        self.limpar(entrada3, "Digite sua senha")
+    def limpartd2_3(self,evento=None):
+        self.ent3.config(state=NORMAL)
+        self.ent3.config(show="*")
+        x = entrada3.get()
+        if x == "Digite sua senha":
+            entrada3.set("")
+        else:
+            entrada3.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
+            entrada1.set("Digite seu nome completo")
+        else:
+            entrada1.set(x2) 
+        x3 = entrada2.get()
+        if x3 == "":
+            entrada2.set("Digite seu e-mail")
+        else:
+            entrada2.set(x3) 
+        x4 = entrada4.get()
+        if x4 == "":
+            entrada4.set("Confirme sua senha")
+            self.ent4.config(show="")
+        elif x4 == "Confirme sua senha":
+            self.ent4.config(show="")
+        else:
+            entrada4.set(x4) 
+    
+    def limpartd2_4(self,evento=None):
+        self.ent4.config(state=NORMAL)
+        self.ent4.config(show="*")
+        x = entrada4.get()
+        if x == "Confirme sua senha":
+            entrada4.set("")
+        else:
+            entrada4.set(x) 
+        x2 = entrada1.get()
+        if x2 == "":
+            entrada1.set("Digite seu nome completo")
+        else:
+            entrada1.set(x2) 
+        x3 = entrada2.get()
+        if x3 == "":
+            entrada2.set("Digite seu e-mail")
+        else:
+            entrada2.set(x3) 
+        x3 = entrada3.get()
+        if x3 == "":
+            entrada3.set("Digite sua senha")
+            self.ent3.config(show="")
+        elif x3 == "Digite sua senha":
+            self.ent3.config(show="")
+        else:
+            entrada3.set(x3) 
+            
+    def voltatextod2(self,event=None):
         x = entrada1.get()
         if x == "":
             entrada1.set("Digite seu nome completo") 
+            self.ent1.config(state=DISABLED)
         y = entrada2.get()
         if y == "":
             entrada2.set("Digite seu e-mail")
-        a = entrada4.get()
-        if a == "":
-            entrada4.set("Confirme sua senha")
-    
-    def limpard64(self,evento=None):
-        self.limpar(entrada4, "Confirme sua senha")
-        x = entrada1.get()
-        if x == "":
-            entrada1.set("Digite seu nome completo") 
-        y = entrada2.get()
-        if y == "":
-            entrada2.set("Digite seu e-mail")
+            self.ent2.config(state=DISABLED)
         z = entrada3.get()
         if z == "":
-            entrada3.set("Digite sua senha") 
-        a = entrada4.get()
-    
-    def voltatextod6(self,vento=None):
-        x = entrada1.get()
-        if x == "":
-            entrada1.set("Digite seu nome completo") 
-        y = entrada2.get()
-        if y == "":
-            entrada2.set("Digite seu e-mail")
-        z = entrada3.get()
-        if z == "":
-            entrada3.set("Digite sua senha") 
-        a = entrada4.get()
-        if a == "":
+            entrada3.set("Digite sua senha")
+            self.ent3.config(state=DISABLED)
+            self.ent3.config(show="")
+        z2 = entrada4.get()
+        if z2 == "":
             entrada4.set("Confirme sua senha")
+            self.ent4.config(state=DISABLED)
+            self.ent4.config(show="")
+    
+    def mostrard2_1(self,event=None):
+        z = entrada3.get()
+        if z != "Digite sua senha":
+            self.ent3.config(show="")
+    def mostrard2_2(self,event=None):
+        z = entrada3.get()
+        if z != "Digite sua senha":
+            self.ent3.config(show="*")
+    def mostrard2_3(self,event=None):
+        z = entrada4.get()
+        if z != "Digite sua senha":
+            self.ent4.config(show="")
+    def mostrard2_4(self,event=None):
+        z = entrada4.get()
+        if z != "Confirme sua senha":
+            self.ent4.config(show="*")
 
     def conexãod6(self):
         self.nomescrito = entrada1.get()
@@ -1522,6 +1904,8 @@ class Kindly():
         self.img2 = PhotoImage(file = os.path.abspath("btnPerfilgg.PNG"))
         self.img3 = PhotoImage(file = os.path.abspath("btnSetinha.PNG"))
         self.img4 = PhotoImage(file = os.path.abspath("btnAddcartao.PNG"))
+        self.img5 = PhotoImage(file = os.path.abspath("btnLogout.PNG"))
+        
 
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
@@ -1541,6 +1925,9 @@ class Kindly():
         
         self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img4 ,command = lambda: self.teladoador11())
         self.btn3.place(relx = 0.13, rely = 0.86, relwidth = 0.72, relheight = 0.15)
+        
+        self.btn4 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img5 ,command = lambda: self.Padrao2())
+        self.btn4.place(relx = 0.85, rely = 0.025, relwidth = 0.1, relheight = 0.06)
     
         self.conexaod10()
         
@@ -1701,12 +2088,6 @@ class Kindly():
                 self.ent3.icursor(END)
         else:
             entrada3.set(self.numcard[:len(self.numcard) -1])
-    def arrumar2(self,evento=None):
-        self.cvccard = entrada4.get()
-        if len(self.cvccard) < 4:
-            entrada4.set(self.cvccard)
-        else:
-            entrada4.set(self.cvccard[:len(self.cvccard) -1])
     
     def arrumar3(self,evento=None):
         self.vencimentocard = entrada5.get()
@@ -1795,7 +2176,6 @@ class Kindly():
                         if self.lblc8T == True:
                             self.lblc8.destroy()
                             self.lblc8T = False
-                        
                         if self.lblc8T == False:
                             self.lblc8 = Label(self.jan, text = "Número inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
                             self.lblc8.place(relx = 0.11, rely = 0.495, relwidth = 0.4, relheight = 0.04)
@@ -1813,47 +2193,6 @@ class Kindly():
                     self.lblc8.place(relx = 0.11, rely = 0.495, relwidth = 0.4, relheight = 0.04)
                     self.lblc8T = True
                         
-
-        if self.cvccard == "" or self.cvccard == "CVC":
-            if self.lblc4T == False:
-                self.lblc4 = Label(self.jan, text = "Digite o CVC!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                self.lblc4.place(relx = 0.09, rely = 0.61, relwidth = 0.4, relheight = 0.04)
-                self.lblc4T = True
-        else:
-            if len(self.cvccard) == 3:
-                for i in self.cvccard:
-                    if i.isnumeric():
-                        self.x4 = True
-                        if self.lblc4T == True:
-                            self.lblc4.destroy()
-                            self.lblc4T = False
-                        if self.lblc9T == True:
-                            self.lblc9.destroy()
-                            self.lblc9T = False
-                    else:
-                        if self.lblc4T == True:
-                            self.lblc4.destroy()
-                            self.lblc4T = False
-                        if self.lblc9T == True:
-                            self.lblc9.destroy()
-                            self.lblc9T = False
-                        
-                        if self.lblc9T == False:
-                            self.lblc9 = Label(self.jan, text = "CVC inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                            self.lblc9.place(relx = 0.11, rely = 0.61, relwidth = 0.4, relheight = 0.04)
-                            self.lblc9T = True
-            else:
-                if self.lblc4T == True:
-                    self.lblc4.destroy()
-                    self.lblc4T = False
-                if self.lblc9T == True:
-                    self.lblc9.destroy()
-                    self.lblc9T = False
-                
-                if self.lblc9T == False:
-                    self.lblc9 = Label(self.jan, text = "CVC inválido!", font = "Century\ Gothic 12", fg = "#FE4A49", bg = "#131644")
-                    self.lblc9.place(relx = 0.11, rely = 0.61, relwidth = 0.4, relheight = 0.04)
-                    self.lblc9T = True
         
         if self.vencimentocard == "" or self.vencimentocard == "Vencimento":
             if self.lblc5T == False:
@@ -1921,7 +2260,7 @@ class Kindly():
                 self.iddoador = self.listad6_1[0]
                 self.listad6_1 = []
             
-            cursor.execute(f"insert into cartoes (nomeuser,cpfuser,numcard,cvccard,vencicard,bandeiracard,iduser) values (%s,%s,%s,%s,%s,%s,%s);",(self.nomescrito,self.cpfescrito, self.numcard, self.cvccard, self.vencimentocard,self.bandeiracard,self.iddoador))
+            cursor.execute(f"insert into cartoes (nomeuser,cpfuser,numcard,vencicard,bandeiracard,iduser) values (%s,%s,%s,%s,%s,%s);",(self.nomescrito,self.cpfescrito, self.numcard, self.vencimentocard,self.bandeiracard,self.iddoador))
             conexao.commit()
             if nd == 1:
                 self.teladoador10()
@@ -2020,23 +2359,35 @@ class Kindly():
         self.btn3 = Button(self.jan, bg = "#131644",bd = 0, activebackground = "#131644", image = self.img3 ,command = lambda: self.teladoador9())
         self.btn3.place(relx = 0.03, rely = 0.025, relwidth = 0.15, relheight = 0.06)
     
-
         global entrada1
         entrada1 = StringVar()
-        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 3, textvariable = entrada1)
+        self.ent1 = Entry(self.jan, bg = "#131644", font = "Century\ Gothic 14",fg = "white",bd = 3, textvariable = entrada1,disabledbackground = "#131644",disabledforeground = "white")
         self.ent1.place(relx = 0.01, rely = 0.565, relwidth = 0.98, relheight = 0.08)
         entrada1.set("Digite aqui...")
         
-        self.ent1.bind("<1>",self.limpard131)
-        self.lbl1.bind("<1>",self.voltatextod131)
+        self.ent1.bind("<1>",self.limpard13_1)
+        self.lbl1.bind("<1>",self.voltatextod13_1)
+        self.jan.bind("<Return>",self.algo)
             
-    def limpard131(self,evento=None):
-        self.limpar(entrada1, "Digite aqui...")
+    def limpard13_1(self,evento=None):
+        self.ent1.config(state=NORMAL)
+        x = entrada1.get()
+        if x == "Digite aqui...":
+            entrada1.set("")
+        else:
+            entrada1.set(x) 
     
-    def voltatextod131(self,vento=None):
+    def voltatextod13_1(self,vento=None):
         x = entrada1.get()
         if x == "":
-            entrada1.set("Digite aqui...")
+            entrada1.set("Digite aqui...") 
+            self.ent1.config(state=DISABLED)
+    
+    def algo(self,evento=None):
+        x = entrada1.get()
+        if x != "":
+            cursor.execute(f"insert into chat (iduser,idinst,mensagem) values (%s,%s,%s);",(self.iddoador,self.idinst,x))
+            conexao.commit()
     
     def teladoador14(self): 
         self.img1 = PhotoImage(file = os.path.abspath("doador14.png"))
