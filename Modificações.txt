@@ -1,0 +1,29 @@
+TelaInst11
+
+self.lbl2 = Label(self.jan, image = self.img4,bg = "#131644")
+        self.lbl2.place(relx = 0.3, rely = 0.27, relwidth =0.64, relheight = 0.2)
+        self.lbl3 = Label(self.jan,text ="Claro, de acordo com\n a sua disponibilidade.",font = " Century\ Gothic 14",fg = "black",bg = "#BDAB9F", anchor = "w")
+        self.lbl3.place(relx = 0.305, rely = 0.315, relwidth =0.56, relheight = 0.1)
+        
+        self.lbl4 = Label(self.jan, image = self.img5,bg = "#131644")
+        self.lbl4.place(relx = 0.02, rely = 0.12, relwidth =0.64, relheight = 0.14)
+        self.lbl5 = Label(self.jan,text ="Bom dia, posso \n realizar visitas?",font = " Century\ Gothic 14",fg = "black",bg = "white", anchor = "w")
+        self.lbl5.place(relx = 0.09, rely = 0.135, relwidth =0.56, relheight = 0.1)
+
+Teladoador13
+
+self.lbl1 = Label(self.jan, image = self.img4,bg = "#131644")
+        self.lbl1.place(relx = 0.3, rely = 0.12, relwidth =0.64, relheight = 0.2)
+        self.lbl1 = Label(self.jan,text ="Bom dia, posso \n realizar visitas?",font = " Century\ Gothic 14",fg = "black",bg = "#BDAB9F", anchor = "w")
+        self.lbl1.place(relx = 0.35, rely = 0.185, relwidth =0.46, relheight = 0.06)
+        
+        self.lbl1 = Label(self.jan, image = self.img5,bg = "#131644")
+        self.lbl1.place(relx = 0.02, rely = 0.27, relwidth =0.64, relheight = 0.14)
+        self.lbl1 = Label(self.jan,text ="Claro, de acordo com\n a sua disponibilidade.",font = " Century\ Gothic 14",fg = "black",bg = "white", anchor = "w")
+        self.lbl1.place(relx = 0.085, rely = 0.29, relwidth =0.56, relheight = 0.1)
+
+
+self.lbl1 = Label(self.jan, image = self.img4,bg = "#131644")
+        self.lbl1.place(relx = 0.3, rely = 0.39, relwidth =0.64, relheight = 0.16)
+        self.lbl1 = Label(self.jan,text = x,font = " Century\ Gothic 14",fg = "black",bg = "#BDAB9F", anchor = "w")
+        self.lbl1.place(relx = 0.33, rely = 0.43, relwidth =0.48, relheight = 0.06) 
