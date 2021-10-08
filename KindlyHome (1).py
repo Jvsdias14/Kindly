@@ -1024,6 +1024,12 @@ class Kindly():
     
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
+        
+        self.lbl1 = Label(self.jan, image = self.img5,bg = "#131644")
+        self.lbl1.place(relx = 0.3, rely = 0.12, relwidth =0.64, relheight = 0.2)
+        self.lbl1 = Label(self.jan,text ="Bom dia, posso realizar visitas?",font = " Century\ Gothic 14",fg = "black",bg = "white", anchor = "w")
+        self.lbl1.place(relx = 0.33, rely = 0.17, relwidth =0.4, relheight = 0.06)
+        
 
         self.btn1 = Button(self.jan,text = "João Victor Sampaio Dias", font = "Century\ Gothic 14",fg = "white", bg = "#131644",bd = 0,anchor = "w",activebackground = "gray",command = lambda: self.teste())
         self.btn1.place(relx = 0.38, rely = 0.01, relwidth = 0.58, relheight = 0.09)
@@ -1065,6 +1071,7 @@ class Kindly():
         self.lbl1.place(relx = 0.3, rely = 0.12, relwidth =0.64, relheight = 0.2)
         self.lbl1 = Label(self.jan,text = x,font = " Century\ Gothic 14",fg = "black",bg = "#BDAB9F", anchor = "w")
         self.lbl1.place(relx = 0.33, rely = 0.17, relwidth =0.4, relheight = 0.06) 
+        entrada1.set("")
     
     def telainst12(self):   
         self.img1 = PhotoImage(file = os.path.abspath("Inst12.png"))
@@ -2686,6 +2693,16 @@ class Kindly():
     
         self.lbl1 = Label(self.jan, image = self.img1)
         self.lbl1.place(relx = 0, rely = 0, relwidth =1, relheight = 1)
+        
+        self.lbl1 = Label(self.jan, image = self.img4,bg = "#131644")
+        self.lbl1.place(relx = 0.3, rely = 0.12, relwidth =0.64, relheight = 0.2)
+        self.lbl1 = Label(self.jan,text ="Bom dia, posso realizar visitas?",font = " Century\ Gothic 14",fg = "black",bg = "#BDAB9F", anchor = "w")
+        self.lbl1.place(relx = 0.33, rely = 0.17, relwidth =0.4, relheight = 0.06)
+        
+        self.lbl1 = Label(self.jan, image = self.img5,bg = "#131644")
+        self.lbl1.place(relx = 0.3, rely = 0.22, relwidth =0.64, relheight = 0.2)
+        self.lbl1 = Label(self.jan,text ="Claro, de acordo com a sua disponibilidade",font = " Century\ Gothic 14",fg = "black",bg = "white", anchor = "w")
+        self.lbl1.place(relx = 0.33, rely = 0.27, relwidth =0.4, relheight = 0.06)
         '''
         if edoador:
             if quemEnviou[0] == "Doador":
@@ -2742,11 +2759,14 @@ class Kindly():
     
     def salvachat(self,evento=None):
         x = entrada1.get()
-        print(x)
+        print(x) 
+        
         self.lbl1 = Label(self.jan, image = self.img4,bg = "#131644")
-        self.lbl1.place(relx = 0.3, rely = 0.12, relwidth =0.64, relheight = 0.2)
+        self.lbl1.place(relx = 0.3, rely = 0.42, relwidth =0.64, relheight = 0.2)
         self.lbl1 = Label(self.jan,text = x,font = " Century\ Gothic 14",fg = "black",bg = "#BDAB9F", anchor = "w")
-        self.lbl1.place(relx = 0.33, rely = 0.17, relwidth =0.4, relheight = 0.06) 
+        self.lbl1.place(relx = 0.33, rely = 0.47, relwidth =0.4, relheight = 0.06) 
+        
+        entrada1.set("")
         '''if x != "":
             cursor.execute(f"insert into chat (iduser,idinst,mensagem) values (%s,%s,%s);",(idlogado,self.idinst,x))
             conexao.commit()'''
